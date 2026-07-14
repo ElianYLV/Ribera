@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Contáctanos - Ribera de Cajititlán</title>
+  <style>
+    :root {
+      --naranja: #FC581A;
+      --menta: #40E0D0;
+      --fondo: #CDE8E5;
+      --verde: #063D14;
+      --texto: #111;
+      --blanco: #fff;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background: var(--fondo);
+      color: var(--texto);
+      font-family: Arial, Helvetica, sans-serif;
+    }
+
+    .site-header {
+      background: linear-gradient(to bottom, var(--naranja) 0 76px, var(--menta) 76px 126px);
+      border-bottom: 1px solid rgba(0, 0, 0, 0.22);
+      box-shadow: 0 8px 28px rgba(0, 0, 0, 0.08);
+    }
+
+    .header-inner {
+      width: 100%;
+      height: 126px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 148px 1fr auto;
+      grid-template-rows: 76px 50px;
+      align-items: center;
+      gap: 0;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      align-self: stretch;
+      grid-column: 1;
+      grid-row: 1;
+      min-width: 0;
+      padding: 4px 7px 5px;
+      background: #fff;
+      z-index: 2;
+    }
+
+    .brand img {
+      width: 136px;
+      height: auto;
+      display: block;
+    }
+
+    .header-center {
+      grid-column: 2;
+      grid-row: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .page-title {
+      margin: 0;
+      color: #050505;
+      font-size: clamp(34px, 3.2vw, 47px);
+      font-style: italic;
+      font-weight: 900;
+      text-align: center;
+      letter-spacing: 0;
+    }
+
+    .page-title-link {
+      display: inline;
+      text-decoration: none;
+      color: inherit;
+      padding: 0;
+      border: none;
+      background: transparent;
+      transition: color 160ms ease, text-decoration 160ms ease;
+    }
+
+    .page-title-link:hover,
+    .page-title-link:focus-visible {
+      text-decoration: underline;
+      outline: none;
+    }
+
+    .header-right {
+      grid-column: 1 / -1;
+      grid-row: 2;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 0;
+      max-width: 100%;
+      gap: 12px;
+      padding: 0 16px 10px;
+    }
+
+    .main-nav {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 450px;
+      padding: 0;
+      width: 100%;
+      max-width: 280px;
+      transform: translateX(450px);
+    }
+
+    .nav-item {
+      position: relative;
+    }
+
+    .nav-button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      width: min(220px, 100%);
+      max-width: 220px;
+      padding: 12px 18px;
+      border: 1px solid rgba(0, 0, 0, 0.12);
+      border-radius: 8px;
+      background: rgba(255, 255, 255, 0.95);
+      color: #111;
+      font: italic 18px/1 Arial, Helvetica, sans-serif;
+      line-height: 1;
+      cursor: pointer;
+      transition: background 160ms ease, transform 160ms ease, box-shadow 160ms ease;
+      white-space: nowrap;
+    }
+
+    .nav-button:hover,
+    .nav-button:focus-visible {
+      background: var(--menta);
+      color: #000;
+      box-shadow: none;
+      transform: translateY(-1px);
+      outline: none;
+    }
+
+    .dropdown {
+      position: absolute;
+      top: 100%;
+      left: 0;
+      right: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      padding: 10px 12px;
+      border: 1px solid rgba(0, 0, 0, 0.12);
+      background: rgba(255, 255, 255, 0.98);
+      box-shadow: 0 18px 36px rgba(0, 0, 0, 0.12);
+      opacity: 0;
+      pointer-events: none;
+      transform: translateY(10px);
+      transition: opacity 170ms ease, transform 170ms ease;
+      border-radius: 10px;
+      min-width: 220px;
+      width: max-content;
+      max-width: calc(100vw - 32px);
+    }
+
+    .nav-item:hover .dropdown,
+    .nav-item:focus-within .dropdown,
+    .dropdown.open {
+      opacity: 1;
+      pointer-events: auto;
+      transform: translateY(0);
+    }
+
+    .dropdown-link {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 10px 16px;
+      border: 1px solid transparent;
+      border-radius: 8px;
+      background: transparent;
+      color: #111;
+      font: italic 16px/1 Arial, Helvetica, sans-serif;
+      text-decoration: none;
+      transition: background 160ms ease, color 160ms ease, border-color 160ms ease, transform 160ms ease;
+    }
+
+    .dropdown-link:hover,
+    .dropdown-link:focus-visible {
+      background: var(--menta);
+      color: #000;
+      border-color: rgba(0, 0, 0, 0.08);
+      transform: translateY(-1px);
+      outline: none;
+    }
+
+    .content {
+      width: min(1040px, calc(100% - 32px));
+      margin: 0 auto;
+      padding: 44px 0 64px;
+    }
+
+    .text-panel {
+      padding: 24px 28px;
+      background: rgba(255, 255, 255, 0.95);
+      border-left: 6px solid var(--naranja);
+      box-shadow: 0 10px 24px rgba(0, 0, 0, 0.1);
+      border-radius: 18px;
+      font-size: 18px;
+      line-height: 1.7;
+      color: #111;
+    }
+
+    .text-panel h2 {
+      margin-top: 0;
+      color: var(--verde);
+      font-size: clamp(32px, 3vw, 44px);
+      font-weight: 900;
+    }
+
+    .text-panel p {
+      margin: 0 0 18px;
+    }
+
+    .contact-list {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      display: grid;
+      gap: 14px;
+    }
+
+    .contact-list li {
+      padding: 16px 18px;
+      border-radius: 14px;
+      background: rgba(246, 246, 246, 0.96);
+      border: 1px solid rgba(0, 0, 0, 0.08);
+    }
+
+    .contact-list strong {
+      display: block;
+      margin-bottom: 8px;
+      color: var(--verde);
+    }
+
+    @media (max-width: 860px) {
+      .header-inner {
+        height: auto;
+        grid-template-columns: 1fr;
+        grid-template-rows: auto auto auto;
+      }
+
+      .brand,
+      .page-title,
+      .main-nav {
+        grid-column: 1;
+        grid-row: auto;
+      }
+
+      .brand {
+        width: 148px;
+        height: 76px;
+      }
+
+      .page-title {
+        padding: 12px 16px;
+      }
+
+      .main-nav {
+        width: min(330px, calc(100% - 32px));
+        justify-self: center;
+        margin-bottom: 14px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header class="site-header">
+    <div class="header-inner">
+      <a class="brand" href="index.html" aria-label="Volver al inicio">
+        <img src="imagenes/logo-tlajomulco.png" alt="Tlajomulco Gobierno Municipal" />
+      </a>
+
+      <div class="header-center">
+        <a class="page-title-link" href="index.html" aria-label="Volver al inicio">
+          <h1 class="page-title">Contáctanos</h1>
+        </a>
+      </div>
+
+      <div class="header-right">
+        <nav class="main-nav" aria-label="Secciones principales">
+          <div class="nav-item">
+            <button class="nav-button" type="button" aria-expanded="false">Acerca de...</button>
+            <div class="dropdown">
+              <a class="dropdown-link" href="pueblos.html">Historia de las localidades</a>
+              <a class="dropdown-link" href="redes.html">Nuestras Redes</a>
+              <a class="dropdown-link" href="contacto.html">Contáctanos</a>
+            </div>
+          </div>
+        </nav>
+      </div>
+    </div>
+  </header>
+
+  <main class="content">
+    <section class="text-panel" aria-label="Contacto Ribera de Cajititlán">
+      <h2>Contacta a la Ribera de Cajititlán</h2>
+      <p>Si tienes dudas, sugerencias o quieres obtener más información sobre la región, puedes escribirnos o visitarnos en los puntos oficiales.</p>
+      <ul class="contact-list">
+        <li>
+          <strong>Correo electrónico</strong>
+          <span>info@riberadecajititlan.mx</span>
+        </li>
+        <li>
+          <strong>Teléfono</strong>
+          <span>+52 33 1234 5678</span>
+        </li>
+        <li>
+          <strong>Dirección</strong>
+          <span>Plaza Principal, Ribera de Cajititlán, Tlajomulco de Zúñiga, Jalisco</span>
+        </li>
+        <li>
+          <strong>Horario de atención</strong>
+          <span>Lunes a viernes, 9:00 a 17:00</span>
+        </li>
+      </ul>
+    </section>
+  </main>
+</body>
+</html>

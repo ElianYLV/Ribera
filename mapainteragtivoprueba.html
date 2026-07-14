@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Mapa interactivo</title>
+
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+  <style>
+    html,
+    body {
+      width: 100%;
+      height: 100%;
+      margin: 0;
+      padding: 0;
+      background: #f3f6fa;
+      font-family: Arial, Helvetica, sans-serif;
+    }
+
+    .map-frame {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+    }
+
+    #map {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+    }
+
+    .map-header {
+      position: absolute;
+      top: 18px;
+      left: 18px;
+      right: 18px;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 14px;
+      z-index: 1000;
+    }
+
+    .map-header h1 {
+      margin: 0;
+      color: #111827;
+      font-size: 2rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      text-shadow: 0 2px 16px rgba(15, 23, 42, 0.08);
+    }
+
+    .map-description {
+      max-width: 320px;
+      background: rgba(255, 255, 255, 0.94);
+      border-radius: 18px;
+      padding: 16px 18px;
+      box-shadow: 0 20px 42px rgba(15, 23, 42, 0.12);
+      backdrop-filter: blur(14px);
+      color: #334155;
+      opacity: 0;
+      transform: translateY(-12px);
+      pointer-events: none;
+      transition: opacity 180ms ease, transform 180ms ease;
+    }
+
+    .map-description.visible {
+      opacity: 1;
+      transform: translateY(0);
+      pointer-events: auto;
+    }
+
+    .map-description strong {
+      display: block;
+      font-size: 0.98rem;
+      color: #0f172a;
+      margin-bottom: 6px;
+    }
+
+    .map-description p {
+      margin: 0;
+      font-size: 0.92rem;
+      line-height: 1.5;
+    }
+
+    /* .map-description .description-action {
+      display: inline-flex;
+      margin-top: 12px;
+      padding: 10px 14px;
+      background: #2563eb;
+      color: white;
+      border-radius: 12px;
+      text-decoration: none;
+      font-size: 0.88rem;
+      box-shadow: 0 10px 20px rgba(37, 99, 235, 0.18);
+    } */
+
+    .map-footer {
+      position: absolute;
+      left: 18px;
+      right: 18px;
+      bottom: 18px;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+      gap: 12px;
+      z-index: 1000;
+    }
+
+    .place-button {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 6px;
+      padding: 14px 16px;
+      background: rgba(255, 255, 255, 0.92);
+      border: 1px solid rgba(148, 163, 184, 0.18);
+      border-radius: 18px;
+      color: #0f172a;
+      text-align: left;
+      cursor: pointer;
+      transition: transform 160ms ease, box-shadow 160ms ease, background 160ms ease;
+    }
+
+    .place-button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 18px 40px rgba(15, 23, 42, 0.12);
+      background: #ffffff;
+    }
+
+    .place-title {
+      font-weight: 700;
+      font-size: 0.98rem;
+    }
+
+    .place-subtitle {
+      font-size: 0.82rem;
+      color: #64748b;
+    }
+
+    .map-image-button {
+      cursor: pointer;
+      opacity: 1;
+      transform-origin: center bottom;
+      filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.28));
+      transition: opacity 160ms ease, transform 160ms ease, filter 160ms ease;
+    }
+
+    .map-image-button:hover {
+      opacity: 0.72;
+      transform: translateY(-10px) scale(1.08);
+      filter: drop-shadow(0 14px 16px rgba(0, 0, 0, 0.34));
+    }
+
+    .leaflet-popup-content {
+      margin: 10px 14px;
+      font-size: 14px;
+      line-height: 1.4;
+    }
+  </style>
+</head>
+<body>
+  <div class="map-frame">
+    <div class="map-header">
+      <h1>Mapa</h1>
+      <div class="map-description" id="mapDescription">
+        <strong id="descriptionTitle">Selecciona un pueblo</strong>
+        <p id="descriptionText">Haz clic en una de las imágenes del mapa para ver más detalles.</p>
+        <!-- <a id="descriptionLink" class="description-action" href="#" target="_self">Ver más</a> -->
+      </div>
+    </div>
+    <div id="map"></div>
+    <div class="map-footer">
+      <button class="place-button" onclick="abrirPagina('caji_inf.html')">
+        <span class="place-title">Cajititlán</span>
+        <span class="place-subtitle">"Frase"</span>
+      </button>
+      <button class="place-button" onclick="abrirPagina('cuex_inf.html')">
+        <span class="place-title">Cuexcomatitlán</span>
+        <span class="place-subtitle">"Frase"</span>
+      </button>
+      <button class="place-button" onclick="abrirPagina('sanmiguel_inf.html')">
+        <span class="place-title">San Miguel Cuyutlán</span>
+        <span class="place-subtitle">"Frase"</span>
+      </button>
+      <button class="place-button" onclick="abrirPagina('sanjuan_inf.html')">
+        <span class="place-title">San Juan Evangelista</span>
+        <span class="place-subtitle">"Frase"</span>
+      </button>
+      <button class="place-button" onclick="abrirPagina('sanlucas_inf.html')">
+        <span class="place-title">San Lucas Evangelista</span>
+        <span class="place-subtitle">"Frase"</span>
+      </button>
+    </div>
+  </div>
+
+  <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+  <script>
+    const map = L.map("map").setView([20.4178, -103.3502], 12);
+
+    L.tileLayer("https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png", {
+      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
+      subdomains: "abcd",
+      maxZoom: 20
+    }).addTo(map);
+
+    if (navigator.geolocation) {
+      navigator.geolocation.watchPosition(function (position) {
+        const userLatLng = [position.coords.latitude, position.coords.longitude];
+        if (!window.userLocationMarker) {
+          window.userLocationMarker = L.circleMarker(userLatLng, {
+            radius: 8,
+            color: '#2563eb',
+            fillColor: '#3b82f6',
+            fillOpacity: 0.95,
+            weight: 3
+          }).addTo(map);
+          window.userLocationCircle = L.circle(userLatLng, {
+            radius: 40,
+            color: '#60a5fa',
+            fillColor: '#93c5fd',
+            fillOpacity: 0.2,
+            weight: 1
+          }).addTo(map);
+          window.userLocationMarker.bindPopup('Tu ubicación');
+        } else {
+          window.userLocationMarker.setLatLng(userLatLng);
+          window.userLocationCircle.setLatLng(userLatLng);
+        }
+      }, function () {
+        console.warn('No se pudo obtener la ubicación del usuario.');
+      }, {
+        enableHighAccuracy: true,
+        maximumAge: 10000,
+        timeout: 20000
+      });
+    }
+
+    const cuexcomatitlanButton = L.icon({
+      iconUrl: "imagenes/Logos pueblo/Cuexcomatitlan-Photoroom.png",
+      iconSize: [82, 82],
+      iconAnchor: [41, 41],
+      popupAnchor: [0, -42],
+      className: "map-image-button"
+    });
+
+    const cajititlanButton = L.icon({
+      iconUrl: "imagenes/Logos pueblo/Cajititlan-Photoroom.png",
+      iconSize: [82, 82],
+      iconAnchor: [41, 41],
+      popupAnchor: [0, -42],
+      className: "map-image-button"
+    });
+
+      const cerroviejoButton = L.icon({
+      iconUrl: "imagenes/Logos pueblo/Cerroviejo.png",
+      iconSize: [82, 82],
+      iconAnchor: [41, 41],
+      popupAnchor: [0, -42],
+      className: "map-image-button"
+    });
+
+      const SanMiguelCuyutlanPhotoroomButton = L.icon({
+      iconUrl: "imagenes/Logos pueblo/San Miguel Cuyutlan-Photoroom.png",
+      iconSize: [82, 82],
+      iconAnchor: [41, 41],
+      popupAnchor: [0, -42],
+      className: "map-image-button"
+    });
+
+      const SanLucasEvangelistaPhotoroom = L.icon({
+      iconUrl: "imagenes/Logos pueblo/San Lucas Evangelista-Photoroom.png",
+      iconSize: [82, 82],
+      iconAnchor: [41, 41],
+      popupAnchor: [0, -42],
+      className: "map-image-button"
+    });
+
+      const SanJuanEvangelistaPhotoroom = L.icon({
+      iconUrl: "imagenes/Logos pueblo/San Juan Evangelista-Photoroom.png",
+      iconSize: [82, 82],
+      iconAnchor: [41, 41],
+      popupAnchor: [0, -42],
+      className: "map-image-button"
+    });
+
+
+    function showDescription(title, text, url) {
+      const description = document.getElementById('mapDescription');
+      const titleEl = document.getElementById('descriptionTitle');
+      const textEl = document.getElementById('descriptionText');
+      // const linkEl = document.getElementById('descriptionLink');
+
+      titleEl.textContent = title;
+      textEl.textContent = text;
+      // linkEl.href = url;
+      // linkEl.textContent = 'Ver más';
+
+      description.classList.add('visible');
+    }
+
+    function abrirPagina(url) {
+      window.top.location.href = url;
+    }
+
+    L.marker([20.428056, -103.362537], { icon: cuexcomatitlanButton })
+      .addTo(map)
+      .on("click", function () {
+        showDescription('Cuexcomatitlán', 'Ubicado en el corazón del lago, es uno de los pueblos más visitados.', 'cuex_inf.html');
+      });
+
+    L.marker([20.366420, -103.435300], { icon: cerroviejoButton })
+      .addTo(map)
+      .on("click", function () {
+        showDescription('Cerro Viejo', 'Un pueblo pequeño con naturaleza y vistas panorámicas.', 'cerroviejo_inf.html');
+      });
+
+    L.marker([20.431926, -103.308585], { icon: cajititlanButton })
+      .addTo(map)
+      .on("click", function () {
+        showDescription('Cajititlán', 'Famoso por su lago y paseos tranquilos.', 'caji_inf.html');
+      });
+
+    L.marker([20.416660, -103.389628], { icon: SanMiguelCuyutlanPhotoroomButton })
+      .addTo(map)
+      .on("click", function () {
+        showDescription('San Miguel Cuyutlán', 'Con tradiciones y una atmósfera relajada junto al lago.', 'sanmiguel_inf.html');
+      });
+
+    L.marker([20.407260, -103.361414], { icon: SanLucasEvangelistaPhotoroom })
+      .addTo(map)
+      .on("click", function () {
+        showDescription('San Lucas Evangelista', 'Un pueblo histórico con encanto rural.', 'sanlucas_inf.html');
+      });
+
+    L.marker([20.402959, -103.314813], { icon: SanJuanEvangelistaPhotoroom })
+      .addTo(map)
+      .on("click", function () {
+        showDescription('San Juan Evangelista', 'Con lugares de interés cultural y paisajes tranquilos.', 'sanjuan_inf.html');
+      });
+  </script>
+</body>
+</html>

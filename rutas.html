@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Rutas de la Ribera de Cajititlan</title>
+  <style>
+    :root {
+      --naranja: #FC581A;
+      --menta: #40E0D0;
+      --oliva: #7A8152;
+      --cafe-nacarado: #C6A982;
+      --verde-oscuro: #063D14;
+      --texto: #111;
+      --panel: rgba(246, 238, 222, 0.84);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      color: var(--texto);
+      font-family: Arial, Helvetica, sans-serif;
+      background:
+        radial-gradient(circle at top left, rgba(198, 169, 130, 0.68), transparent 34%),
+        linear-gradient(135deg, rgba(122, 129, 82, 0.94), rgba(198, 169, 130, 0.72)),
+        var(--oliva);
+    }
+
+    .site-header {
+      background: linear-gradient(to bottom, var(--naranja) 0 76px, var(--menta) 76px 126px);
+      border-bottom: 1px solid rgba(0, 0, 0, 0.22);
+      box-shadow: 0 8px 28px rgba(0, 0, 0, 0.08);
+    }
+
+    .header-inner {
+      width: 100%;
+      height: 126px;
+      display: grid;
+      grid-template-columns: 148px 1fr auto;
+      grid-template-rows: 76px 50px;
+      align-items: center;
+    }
+
+    .brand {
+      grid-column: 1;
+      grid-row: 1;
+      align-self: stretch;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 4px 7px 5px;
+      background: #fff;
+    }
+
+    .brand img {
+      width: 136px;
+      height: auto;
+      display: block;
+    }
+
+    .page-title {
+      grid-column: 2;
+      grid-row: 1;
+      justify-self: center;
+      margin: 0;
+    }
+
+    .page-title a {
+      color: #050505;
+      display: inline-block;
+      font-size: clamp(34px, 3.2vw, 47px);
+      font-style: italic;
+      font-weight: 900;
+      letter-spacing: 0;
+      text-align: center;
+      text-decoration: none;
+      transition: transform 160ms ease;
+    }
+
+    .page-title a:hover,
+    .page-title a:focus-visible {
+      transform: scale(1.015);
+      outline: none;
+    }
+
+    .main-nav {
+      grid-column: 3;
+      grid-row: 2;
+      align-self: stretch;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 16px;
+      padding: 0;
+      width: 100%;
+      max-width: 280px;
+      transform: translateX(16px);
+    }
+
+    .nav-item {
+      position: relative;
+      width: 100%;
+    }
+
+    .nav-button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      width: min(220px, 100%);
+      max-width: 220px;
+      padding: 12px 18px;
+      border: 1px solid rgba(0, 0, 0, 0.12);
+      border-radius: 8px;
+      background: rgba(255, 255, 255, 0.95);
+      color: #111;
+      font: italic 18px/1 Arial, Helvetica, sans-serif;
+      line-height: 1;
+      cursor: pointer;
+      transition: background 160ms ease, transform 160ms ease, box-shadow 160ms ease;
+      white-space: nowrap;
+    }
+
+    .nav-button:hover,
+    .nav-button:focus-visible {
+      background: var(--menta);
+      color: #000;
+      box-shadow: none;
+      transform: translateY(-1px);
+      outline: none;
+    }
+
+    .dropdown {
+      position: absolute;
+      top: 100%;
+      left: 0;
+      right: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      padding: 10px 12px;
+      border: 1px solid rgba(0, 0, 0, 0.12);
+      background: rgba(255, 255, 255, 0.98);
+      box-shadow: 0 18px 36px rgba(0, 0, 0, 0.12);
+      opacity: 0;
+      pointer-events: none;
+      transform: translateY(10px);
+      transition: opacity 170ms ease, transform 170ms ease;
+      border-radius: 10px;
+      min-width: 220px;
+      width: max-content;
+      max-width: calc(100vw - 32px);
+    }
+
+    .nav-item:hover .dropdown,
+    .nav-item:focus-within .dropdown,
+    .dropdown.open {
+      opacity: 1;
+      pointer-events: auto;
+      transform: translateY(0);
+    }
+
+    .dropdown-link {
+      display: block;
+      padding: 13px 16px;
+      border-top: 1px solid #111;
+      color: #111;
+      font: italic 21px/1 Arial, Helvetica, sans-serif;
+      text-align: center;
+      text-decoration: none;
+      transition: background 160ms ease, padding-left 160ms ease;
+    }
+
+    .dropdown-link:first-child {
+      border-top: 0;
+    }
+
+    .dropdown-link:hover,
+    .dropdown-link:focus-visible {
+      background: var(--menta);
+      padding-left: 22px;
+      outline: none;
+    }
+
+    main {
+      width: min(1380px, calc(100% - 36px));
+      margin: 0 auto;
+      padding: 44px 0 64px;
+    }
+
+    .routes-layout {
+      display: grid;
+      grid-template-columns: minmax(0, 0.92fr) minmax(360px, 470px);
+      align-items: stretch;
+      gap: 28px;
+    }
+
+    .intro-panel {
+      padding: clamp(24px, 3vw, 38px);
+      border-left: 8px solid var(--naranja);
+      background: var(--panel);
+      box-shadow: 0 18px 46px rgba(0, 0, 0, 0.18);
+    }
+
+    .route-images-box {
+      min-height: 100%;
+      overflow: hidden;
+      padding: 0;
+      border: 4px solid rgba(6, 61, 20, 0.48);
+      background: rgba(246, 238, 222, 0.76);
+      box-shadow: 0 18px 46px rgba(0, 0, 0, 0.16);
+    }
+
+    .route-images-box iframe {
+      display: block;
+      width: 100%;
+      min-height: 420px;
+      height: 100%;
+      border: 0;
+      background: #fff;
+    }
+
+    .intro-panel h2 {
+      margin: 0 0 20px;
+      color: var(--verde-oscuro);
+      font-size: clamp(30px, 3vw, 44px);
+      font-style: italic;
+      line-height: 1.05;
+    }
+
+    .intro-panel p {
+      margin: 0 0 20px;
+      font-size: clamp(19px, 1.65vw, 23px);
+      font-weight: 700;
+      line-height: 1.35;
+    }
+
+    .intro-panel p:last-child {
+      margin-bottom: 0;
+    }
+
+    .map-placeholder {
+      width: min(860px, 100%);
+      min-height: 420px;
+      margin: 34px auto 0;
+      overflow: hidden;
+      border: 4px solid rgba(6, 61, 20, 0.45);
+      background: rgba(246, 238, 222, 0.72);
+      box-shadow: 0 18px 46px rgba(0, 0, 0, 0.16);
+    }
+
+    .map-placeholder iframe {
+      display: block;
+      width: 100%;
+      min-height: 420px;
+      height: 100%;
+      border: 0;
+      background: #fff;
+    }
+
+    @media (max-width: 860px) {
+      .header-inner {
+        height: auto;
+        grid-template-columns: 1fr;
+        grid-template-rows: auto auto auto;
+      }
+
+      .brand,
+      .page-title,
+      .main-nav {
+        grid-column: 1;
+        grid-row: auto;
+      }
+
+      .brand {
+        width: 148px;
+        height: 76px;
+      }
+
+      .page-title {
+        padding: 12px 16px;
+        font-size: 32px;
+      }
+
+      .main-nav {
+        width: min(330px, calc(100% - 32px));
+        justify-self: center;
+      }
+
+      main {
+        padding-top: 28px;
+      }
+
+      .routes-layout {
+        grid-template-columns: 1fr;
+      }
+
+      .route-images-box {
+        min-height: 320px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header class="site-header">
+    <div class="header-inner">
+      <a class="brand" href="index.html" aria-label="Volver al inicio">
+        <img src="imagenes/logo-tlajomulco.png" alt="Tlajomulco Gobierno Municipal" />
+      </a>
+
+      <h1 class="page-title">
+        <a href="index.html">Ribera de Cajititlan</a>
+      </h1>
+
+      <nav class="main-nav" aria-label="Navegacion principal">
+        <div class="nav-item">
+          <button class="nav-button" type="button">Acerca de...</button>
+          <div class="dropdown">
+            <a class="dropdown-link" href="pueblos.html">Historia de las localidades</a>
+            <a class="dropdown-link" href="index.html#redes">Nuestras Redes</a>
+            <a class="dropdown-link" href="index.html#contacto">Contáctanos</a>
+          </div>
+        </div>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <div class="routes-layout">
+      <section class="intro-panel" aria-labelledby="rutas-title">
+        <h2 id="rutas-title">Rutas de la Ribera de Cajititlán</h2>
+
+        <p>Descubre la belleza natural, la historia y las tradiciones de la Ribera de Cajititlán a través de sus diferentes rutas de recorrido. Este espacio ha sido diseñado para que visitantes y habitantes puedan explorar los paisajes más representativos de la región mediante recorridos a pie y a caballo, permitiendo una experiencia cercana con el entorno, la cultura local y los atractivos que distinguen a esta importante zona del municipio.</p>
+
+        <p>Las rutas disponibles conectan diversos puntos de interés entre las comunidades ribereñas, ofreciendo la oportunidad de apreciar la riqueza natural de la Laguna de Cajititlán, los caminos tradicionales, áreas de valor ecológico y espacios que forman parte de la historia y la identidad de la región. Cada recorrido ha sido pensado para brindar una experiencia segura, accesible y enriquecedora para personas de todas las edades.</p>
+
+        <p>Los recorridos a pie permiten disfrutar con mayor detalle de los paisajes, la flora, la fauna y los elementos culturales que caracterizan a la ribera, fomentando el turismo responsable y el contacto directo con la naturaleza. Por otro lado, las rutas a caballo ofrecen una experiencia tradicional y auténtica, recordando las costumbres que durante generaciones han formado parte de la vida cotidiana de las comunidades locales.</p>
+
+        <p>A través de estas rutas, los visitantes podrán conocer lugares emblemáticos, disfrutar de vistas panorámicas de la laguna y descubrir la esencia de los cinco pueblos que conforman la Ribera de Cajititlán. Cada trayecto representa una oportunidad para conectar con el patrimonio natural y cultural de la región, promoviendo el respeto por el medio ambiente y el fortalecimiento de la actividad turística local.</p>
+
+        <p>Te invitamos a explorar las diferentes opciones de recorrido y vivir una experiencia única en uno de los espacios más emblemáticos de Tlajomulco de Zúñiga.</p>
+      </section>
+
+      <aside class="route-images-box" aria-label="Mapa de rutas integrado desde maparutas.html">
+        <iframe src="maparutas.html" title="Mapa de rutas de la Ribera de Cajititlán"></iframe>
+      </aside>
+    </div>
+
+    <section class="map-placeholder" aria-label="Mapa integrado desde mapa.html">
+      <iframe src="mapa.html" title="Mapa de la Ribera de Cajititlán"></iframe>
+    </section>
+  </main>
+</body>
+</html>

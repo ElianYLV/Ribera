@@ -1,0 +1,755 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Pueblos de la Ribera de Cajititlan</title>
+  <style>
+    :root {
+      --naranja: #FC581A;
+      --menta: #40E0D0;
+      --oliva: #7A8152;
+      --cafe-nacarado: #C6A982;
+      --verde-oscuro: #063D14;
+      --texto: #111;
+      --panel: rgba(246, 238, 222, 0.84);
+      --tarjeta-bg: rgba(255, 255, 255, 0.95);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      color: var(--texto);
+      font-family: Arial, Helvetica, sans-serif;
+      background:
+        radial-gradient(circle at top left, rgba(198, 169, 130, 0.68), transparent 34%),
+        linear-gradient(135deg, rgba(122, 129, 82, 0.94), rgba(198, 169, 130, 0.72)),
+        var(--oliva);
+    }
+
+    .site-header {
+      background: linear-gradient(to bottom, var(--naranja) 0 76px, var(--menta) 76px 126px);
+      border-bottom: 1px solid rgba(0, 0, 0, 0.22);
+      box-shadow: 0 8px 28px rgba(0, 0, 0, 0.08);
+    }
+
+    .header-inner {
+      width: 100%;
+      height: 126px;
+      display: grid;
+      grid-template-columns: 148px 1fr auto;
+      grid-template-rows: 76px 50px;
+      align-items: center;
+    }
+
+    .brand {
+      grid-column: 1;
+      grid-row: 1;
+      align-self: stretch;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 4px 7px 5px;
+      background: #fff;
+    }
+
+    .brand img {
+      width: 136px;
+      height: auto;
+      display: block;
+    }
+
+    .page-title {
+      grid-column: 2;
+      grid-row: 1;
+      justify-self: center;
+      margin: 0;
+    }
+
+    .page-title-link {
+      display: inline;
+      text-decoration: none;
+      color: inherit;
+      padding: 0;
+      border: none;
+      background: transparent;
+      transition: color 160ms ease, text-decoration 160ms ease;
+    }
+
+    .page-title-link:hover,
+    .page-title-link:focus-visible {
+      text-decoration: underline;
+      outline: none;
+    }
+
+    .page-title a,
+    .page-title-link .page-title {
+      color: #050505;
+      display: inline-block;
+      font-size: clamp(34px, 3.2vw, 47px);
+      font-style: italic;
+      font-weight: 900;
+      letter-spacing: 0;
+      text-align: center;
+      text-decoration: none;
+      transition: transform 160ms ease;
+    }
+
+    .page-title a:hover,
+    .page-title a:focus-visible,
+    .page-title-link:hover .page-title,
+    .page-title-link:focus-visible .page-title {
+      transform: scale(1.015);
+      outline: none;
+    }
+
+    .header-right {
+      grid-column: 1 / -1;
+      grid-row: 2;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 0;
+      max-width: 100%;
+      gap: 12px;
+      padding: 0 16px 10px;
+    }
+
+    .header-center {
+      grid-column: 2;
+      grid-row: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .main-nav {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 450px;
+      padding: 0;
+      width: 100%;
+      max-width: 280px;
+      transform: translateX(450px);
+    }
+
+    .nav-item {
+      position: relative;
+    }
+
+    .nav-button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      width: min(220px, 100%);
+      max-width: 220px;
+      padding: 12px 18px;
+      border: 1px solid rgba(0, 0, 0, 0.12);
+      border-radius: 8px;
+      background: rgba(255, 255, 255, 0.95);
+      color: #111;
+      font: italic 18px/1 Arial, Helvetica, sans-serif;
+      line-height: 1;
+      cursor: pointer;
+      transition: background 160ms ease, transform 160ms ease, box-shadow 160ms ease;
+      white-space: nowrap;
+    }
+
+    .nav-button:hover,
+    .nav-button:focus-visible {
+      background: var(--menta);
+      color: #000;
+      box-shadow: none;
+      transform: translateY(-1px);
+      outline: none;
+    }
+
+    .dropdown {
+      position: absolute;
+      top: 100%;
+      left: 0;
+      right: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      padding: 10px 12px;
+      border: 1px solid rgba(0, 0, 0, 0.12);
+      background: rgba(255, 255, 255, 0.98);
+      box-shadow: 0 18px 36px rgba(0, 0, 0, 0.12);
+      opacity: 0;
+      pointer-events: none;
+      transform: translateY(10px);
+      transition: opacity 170ms ease, transform 170ms ease;
+      border-radius: 10px;
+      min-width: 220px;
+      width: max-content;
+      max-width: calc(100vw - 32px);
+    }
+
+    .nav-item:hover .dropdown,
+    .nav-item:focus-within .dropdown,
+    .dropdown.open {
+      opacity: 1;
+      pointer-events: auto;
+      transform: translateY(0);
+    }
+
+    .dropdown-link {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 10px 16px;
+      border: 1px solid transparent;
+      border-radius: 8px;
+      background: transparent;
+      color: #111;
+      font: italic 16px/1 Arial, Helvetica, sans-serif;
+      text-decoration: none;
+      transition: background 160ms ease, color 160ms ease, border-color 160ms ease, transform 160ms ease;
+    }
+
+    .dropdown-link:hover,
+    .dropdown-link:focus-visible {
+      background: var(--menta);
+      color: #000;
+      border-color: rgba(0, 0, 0, 0.08);
+      transform: translateY(-1px);
+      outline: none;
+    }
+
+    .dropdown-link:hover,
+    .dropdown-link:focus-visible {
+      background: var(--menta);
+      padding-left: 22px;
+      outline: none;
+    }
+
+    main {
+      width: min(1280px, calc(100% - 36px));
+      margin: 0 auto;
+      padding: 44px 0 64px;
+    }
+
+    /* Introducción */
+    .intro-panel {
+      padding: clamp(24px, 3vw, 38px);
+      border-left: 8px solid var(--naranja);
+      background: var(--panel);
+      box-shadow: 0 18px 46px rgba(0, 0, 0, 0.18);
+      margin-bottom: 48px;
+    }
+
+    .intro-panel h2 {
+      margin: 0 0 20px;
+      color: var(--verde-oscuro);
+      font-size: clamp(38px, 3.4vw, 54px);
+      font-style: italic;
+      line-height: 1.1;
+      text-align: center;
+    }
+
+    .intro-panel p {
+      margin: 0 0 20px;
+      font-size: clamp(19px, 1.65vw, 23px);
+      font-weight: 700;
+      line-height: 1.35;
+    }
+
+    .intro-panel p:last-child {
+      margin-bottom: 0;
+    }
+
+    /* Tarjetas */
+    .pueblos-container {
+      display: flex;
+      flex-direction: column;
+      gap: 40px;
+    }
+
+    .pueblo-card {
+      display: flex;
+      flex-direction: column;
+      background: var(--tarjeta-bg);
+      border-radius: 20px;
+      overflow: hidden;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+      transition: transform 300ms ease, box-shadow 300ms ease;
+    }
+
+    .pueblo-card:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 28px 48px rgba(0, 0, 0, 0.25);
+    }
+
+    /* Contenido superior de la tarjeta (imagen + texto) */
+    .card-main {
+      display: grid;
+      grid-template-columns: 300px 1fr;
+      gap: 0;
+    }
+
+    /* Imagen */
+    .card-image {
+      background: #8ba89c;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 280px;
+      overflow: hidden;
+    }
+
+    .card-image img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      transition: transform 400ms ease;
+    }
+
+    .pueblo-card:hover .card-image img {
+      transform: scale(1.03);
+    }
+
+    .image-placeholder {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(135deg, var(--oliva), var(--cafe-nacarado));
+      color: white;
+      font-size: 1.2rem;
+      text-align: center;
+      padding: 20px;
+    }
+
+    /* Contenido de la tarjeta (texto principal) - FUENTE AUMENTADA */
+    .card-content {
+      padding: 28px 32px;
+    }
+
+    .card-content h3 {
+      margin: 0 0 12px;
+      color: var(--verde-oscuro);
+      font-size: clamp(32px, 2.8vw, 44px);
+      font-style: italic;
+      font-weight: 900;
+      border-left: 5px solid var(--naranja);
+      padding-left: 18px;
+    }
+
+    .card-content p {
+      margin: 0 0 16px;
+      font-size: clamp(18px, 1.6vw, 21px);
+      font-weight: 500;
+      line-height: 1.5;
+      color: #2c2c2c;
+    }
+
+    .card-content p:last-child {
+      margin-bottom: 0;
+    }
+
+    /* Sección ¿Qué visitar? - FUENTE AUMENTADA */
+    .que-visitar {
+      border-top: 3px solid var(--naranja);
+      background: rgba(246, 238, 222, 0.5);
+      padding: 22px 32px;
+      margin-top: 0;
+    }
+
+    .que-visitar h4 {
+      margin: 0 0 18px;
+      color: var(--verde-oscuro);
+      font-size: 28px;
+      font-style: italic;
+      font-weight: 900;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .que-visitar h4::before {
+      content: "📍";
+      font-size: 32px;
+    }
+
+    .visitar-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 20px;
+    }
+
+    .visitar-item {
+      background: rgba(255, 255, 255, 0.7);
+      padding: 16px 20px;
+      border-radius: 14px;
+      transition: all 200ms ease;
+    }
+
+    .visitar-item:hover {
+      background: white;
+      transform: translateX(6px);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    }
+
+    .visitar-item strong {
+      display: block;
+      color: var(--naranja);
+      font-size: 20px;
+      font-weight: 900;
+      margin-bottom: 10px;
+    }
+
+    .visitar-item p {
+      margin: 0;
+      font-size: 17px;
+      line-height: 1.5;
+      color: #3a3a3a;
+      font-weight: 500;
+    }
+
+    /* Responsive */
+    @media (max-width: 860px) {
+      .header-inner {
+        height: auto;
+        grid-template-columns: 1fr;
+        grid-template-rows: auto auto auto;
+      }
+
+      .brand,
+      .page-title,
+      .main-nav {
+        grid-column: 1;
+        grid-row: auto;
+      }
+
+      .brand {
+        width: 148px;
+        height: 76px;
+      }
+
+      .page-title {
+        padding: 12px 16px;
+      }
+
+      .page-title a {
+        font-size: 32px;
+      }
+
+      .main-nav {
+        width: min(330px, calc(100% - 32px));
+        justify-self: center;
+        margin-bottom: 14px;
+      }
+
+      main {
+        padding-top: 28px;
+      }
+
+      .card-main {
+        grid-template-columns: 1fr;
+      }
+
+      .card-image {
+        min-height: 240px;
+        max-height: 260px;
+      }
+
+      .card-content {
+        padding: 22px 24px;
+      }
+
+      .card-content h3 {
+        font-size: 32px;
+      }
+
+      .card-content p {
+        font-size: 18px;
+      }
+
+      .que-visitar {
+        padding: 18px 22px;
+      }
+
+      .que-visitar h4 {
+        font-size: 25px;
+      }
+
+      .visitar-grid {
+        grid-template-columns: 1fr;
+        gap: 14px;
+      }
+
+      .visitar-item strong {
+        font-size: 19px;
+      }
+
+      .visitar-item p {
+        font-size: 16px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .card-content {
+        padding: 18px 20px;
+      }
+
+      .card-content h3 {
+        font-size: 28px;
+        padding-left: 12px;
+      }
+
+      .card-content p {
+        font-size: 17px;
+      }
+
+      .que-visitar {
+        padding: 16px 18px;
+      }
+
+      .que-visitar h4 {
+        font-size: 22px;
+      }
+
+      .visitar-item strong {
+        font-size: 18px;
+      }
+
+      .visitar-item p {
+        font-size: 15px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header class="site-header">
+    <div class="header-inner">
+      <a class="brand" href="index.html" aria-label="Volver al inicio">
+        <img src="imagenes/logo-tlajomulco.png" alt="Tlajomulco Gobierno Municipal" />
+      </a>
+
+      <div class="header-center">
+        <a class="page-title-link" href="index.html" aria-label="Volver al inicio">
+          <h1 class="page-title">Ribera de Cajititlán</h1>
+        </a>
+      </div>
+
+      <div class="header-right">
+        <nav class="main-nav" aria-label="Secciones principales">
+          <div class="nav-item">
+            <!-- Botón "Acerca de" que abre el menú desplegable de secciones. -->
+            <button class="nav-button" type="button" aria-expanded="false">Acerca de...</button>
+            <div class="dropdown">
+              <a class="dropdown-link" href="pueblos.html">Historia de las localidades</a>
+              <a class="dropdown-link" href="redes.html">Nuestras Redes</a>
+              <a class="dropdown-link" href="contacto.html">Contáctanos</a>
+            </div>
+          </div>
+        </nav>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <!-- Introducción -->
+    <section class="intro-panel" aria-labelledby="pueblos-title">
+      <h2 id="pueblos-title">Una Ribera, Cinco Experiencias</h2>
+      <p>Cada uno de los pueblos que conforman la Ribera de Cajititlán posee una personalidad propia, una historia que contar y atractivos únicos por descubrir. Juntos forman una región donde la naturaleza, la cultura, las tradiciones y la hospitalidad de sus habitantes crean un destino lleno de oportunidades para explorar.</p>
+      <p>Te invitamos a recorrer cada comunidad, disfrutar de sus paisajes, conocer sus costumbres y descubrir los lugares que hacen de la Ribera de Cajititlán uno de los tesoros más importantes del municipio de Tlajomulco de Zúñiga. Cada visita representa una nueva experiencia y una oportunidad para conectar con la riqueza cultural y natural de esta extraordinaria región.</p>
+      <p><strong>Recomendación para el visitante</strong><br>
+      La mejor manera de conocer la Ribera de Cajititlán es recorrer cada uno de sus pueblos. Cada comunidad ofrece experiencias diferentes, paisajes únicos y tradiciones que enriquecen la identidad de la región. Te invitamos a explorar sus calles, disfrutar de su gastronomía, conocer a su gente y descubrir los atractivos que hacen de la ribera uno de los destinos más especiales de Tlajomulco de Zúñiga.</p>
+    </section>
+
+    <!-- Tarjetas de pueblos -->
+    <div class="pueblos-container" id="pueblosContainer">
+      <!-- Los pueblos se cargarán dinámicamente con JavaScript -->
+    </div>
+  </main>
+
+  <script>
+    // Datos de los pueblos con sus lugares "¿Qué visitar?"
+    const pueblos = [
+      {
+        nombre: "Cajititlán",
+        imagen: "Caji.png",
+        descripcion: `<p>Conocido como el principal punto turístico de la Ribera de Cajititlán, este pueblo combina historia, tradición y naturaleza en un entorno privilegiado a orillas de la laguna. Cajititlán es un lugar donde la cultura local se encuentra con la belleza de los paisajes ribereños, ofreciendo a visitantes y habitantes un espacio lleno de vida, color y experiencias por descubrir.</p>
+        <p>Su emblemático malecón es uno de los sitios más visitados de la región, ideal para caminar, disfrutar de la gastronomía local o contemplar los espectaculares atardeceres que se reflejan sobre las aguas de la laguna. Las festividades tradicionales, los eventos culturales y el ambiente familiar convierten a Cajititlán en un destino obligado para quienes desean conocer la esencia de la ribera.</p>
+        <p>Durante tu visita podrás descubrir restaurantes con vista a la laguna, espacios recreativos, áreas para la convivencia familiar y diversos puntos que permiten apreciar la riqueza natural de la región. Cajititlán es la puerta de entrada a una experiencia donde tradición, naturaleza y turismo se unen para crear recuerdos inolvidables.</p>`,
+        lugares: [
+          { nombre: "Malecón de Cajititlán", descripcion: "Uno de los puntos más emblemáticos de toda la ribera. Desde aquí es posible disfrutar de espectaculares vistas de la Laguna de Cajititlán, caminar junto al agua, tomar fotografías y contemplar algunos de los mejores atardeceres de la región." },
+          { nombre: "Plaza Principal", descripcion: "El corazón de la comunidad, rodeado de comercios, restaurantes y espacios de convivencia donde habitantes y visitantes pueden disfrutar del ambiente tradicional del pueblo." },
+          { nombre: "Templo de los Reyes Magos", descripcion: "Uno de los principales símbolos religiosos y culturales de la localidad. Su importancia histórica y las celebraciones que alberga durante el año lo convierten en un punto de interés para quienes desean conocer las tradiciones de la comunidad." },
+          { nombre: "Zona Gastronómica", descripcion: "Los restaurantes y establecimientos cercanos al malecón ofrecen una amplia variedad de platillos típicos, convirtiéndose en un excelente lugar para disfrutar de la cocina local con vista a la laguna." },
+          { nombre: "Miradores Naturales", descripcion: "Diversos puntos alrededor de la ribera permiten admirar panorámicas únicas de la laguna y del paisaje que rodea a Cajititlán." }
+        ]
+      },
+      {
+        nombre: "Cuexcomatitlán",
+        imagen: "Cuexco.png",
+        descripcion: `<p>Ubicado en una de las zonas más pintorescas de la laguna, Cuexcomatitlán destaca por la tranquilidad de sus paisajes y la autenticidad de su vida comunitaria. Este pueblo ofrece una experiencia diferente, donde el visitante puede disfrutar de la calma de la naturaleza y de una conexión más cercana con el entorno que caracteriza a la Ribera de Cajititlán.</p>
+        <p>Su malecón brinda una vista privilegiada de la laguna y se ha convertido en uno de los lugares favoritos para admirar los amaneceres y atardeceres de la región. Además, sus calles y espacios públicos conservan la esencia de una comunidad que ha sabido preservar sus tradiciones y fortalecer su identidad a través del tiempo.</p>
+        <p>Cuexcomatitlán invita a recorrer sus alrededores, capturar impresionantes paisajes fotográficos y disfrutar de momentos de tranquilidad junto al agua. Es un destino perfecto para quienes buscan relajarse, conectar con la naturaleza y descubrir un rincón lleno de encanto dentro de la ribera.</p>`,
+        lugares: [
+          { nombre: "Malecón de Cuexcomatitlán", descripcion: "Un espacio ideal para caminar, relajarse y disfrutar de la tranquilidad que ofrece la laguna. Es uno de los lugares favoritos para observar amaneceres y atardeceres." },
+          { nombre: "Zona Ribereña", descripcion: "Los alrededores de la laguna ofrecen espacios naturales ideales para la observación del paisaje y la fotografía." },
+          { nombre: "Plaza de la Comunidad", descripcion: "Un punto de encuentro para los habitantes donde se puede apreciar la vida cotidiana y el ambiente tradicional del pueblo." },
+          { nombre: "Áreas Recreativas", descripcion: "Espacios adecuados para la convivencia familiar y el descanso, rodeados por el entorno natural característico de la ribera." },
+          { nombre: "Puntos Fotográficos", descripcion: "Diversos rincones del malecón y de la zona ribereña permiten capturar algunas de las mejores vistas de la Laguna de Cajititlán." }
+        ]
+      },
+      {
+        nombre: "San Juan Evangelista",
+        imagen: "SanJuan.png",
+        descripcion: `<p>San Juan Evangelista es una comunidad que conserva con orgullo sus raíces históricas y culturales. Su ubicación privilegiada junto a la laguna le permite ofrecer paisajes únicos y espacios ideales para quienes desean explorar la riqueza natural y social de la región.</p>
+        <p>Las tradiciones religiosas y las celebraciones comunitarias forman parte fundamental de la identidad del pueblo, fortaleciendo el sentido de pertenencia de sus habitantes y preservando costumbres que han pasado de generación en generación. Sus calles reflejan la historia de una comunidad trabajadora que mantiene vivo el legado cultural de la ribera.</p>
+        <p>Visitar San Juan Evangelista es una oportunidad para descubrir la hospitalidad de su gente, disfrutar de la tranquilidad de sus alrededores y conocer lugares que muestran el valor histórico y cultural de esta importante localidad. Cada rincón cuenta una historia que forma parte de la identidad de la Ribera de Cajititlán.</p>`,
+        lugares: [
+          { nombre: "Centro del Pueblo", descripcion: "Sus calles y espacios públicos conservan el carácter tradicional de la comunidad y permiten conocer de cerca la vida cotidiana de sus habitantes." },
+          { nombre: "Templo Local", descripcion: "Uno de los puntos más representativos de la comunidad y un reflejo de la importancia de las tradiciones religiosas en la región." },
+          { nombre: "Zona Ribereña", descripcion: "Desde distintos puntos del pueblo es posible apreciar paisajes naturales que muestran la belleza de la laguna y sus alrededores." },
+          { nombre: "Espacios Comunitarios", descripcion: "Áreas utilizadas para eventos, reuniones y festividades que reflejan la identidad cultural de San Juan Evangelista." },
+          { nombre: "Rutas Escénicas", descripcion: "Los caminos que conectan el pueblo con otras comunidades de la ribera ofrecen recorridos llenos de paisajes naturales y vistas panorámicas." }
+        ]
+      },
+      {
+        nombre: "San Lucas Evangelista",
+        imagen: "SanLucas.png",
+        descripcion: `<p>San Lucas Evangelista es una comunidad llena de tradición y orgullo local que ha contribuido al desarrollo histórico de la región ribereña. Rodeado por paisajes naturales y conectado con las demás localidades de la laguna, este pueblo representa un importante punto de encuentro entre la cultura y la naturaleza.</p>
+        <p>Su ambiente tranquilo, sus espacios de convivencia y sus festividades tradicionales permiten a los visitantes conocer de cerca la forma de vida de una comunidad que ha mantenido vivas sus costumbres a lo largo del tiempo. La cercanía con la laguna ofrece además la posibilidad de disfrutar de hermosas vistas y escenarios ideales para la fotografía y el turismo local.</p>
+        <p>Quienes visitan San Lucas Evangelista encuentran un lugar donde la historia, la convivencia comunitaria y la belleza del entorno se combinan para ofrecer una experiencia auténtica. Es una excelente oportunidad para descubrir una de las comunidades más representativas de la ribera.</p>`,
+        lugares: [
+          { nombre: "Plaza Principal", descripcion: "Un espacio de convivencia donde se desarrollan diversas actividades comunitarias y culturales a lo largo del año." },
+          { nombre: "Templo de la Comunidad", descripcion: "Representa uno de los principales puntos de referencia histórica y cultural de San Lucas Evangelista." },
+          { nombre: "Calles Tradicionales", descripcion: "Recorrer el pueblo permite apreciar la arquitectura local y la esencia de una comunidad con profundas raíces históricas." },
+          { nombre: "Entorno Natural", descripcion: "Los alrededores ofrecen paisajes rurales y vistas que permiten disfrutar de la tranquilidad característica de la región." },
+          { nombre: "Conexión con la Ribera", descripcion: "Su ubicación facilita el acceso a distintos puntos de interés cercanos a la laguna, convirtiéndolo en una parada ideal dentro de cualquier recorrido." }
+        ]
+      },
+      {
+        nombre: "Los Santos Reyes",
+        imagen: "LosSantos.png",
+        descripcion: `<p>Los Santos Reyes es una comunidad que complementa la riqueza cultural y social de la Ribera de Cajititlán. Su cercanía con la laguna y su entorno natural la convierten en un lugar atractivo para quienes buscan explorar nuevos paisajes y conocer más sobre las tradiciones de la región.</p>
+        <p>La comunidad destaca por el arraigo de sus costumbres, la convivencia entre sus habitantes y el ambiente tranquilo que caracteriza a sus espacios públicos. Sus alrededores ofrecen escenarios ideales para disfrutar de la naturaleza, realizar recorridos y descubrir la belleza que distingue a esta parte de la ribera.</p>
+        <p>Te invitamos a conocer Los Santos Reyes y explorar los lugares que reflejan la identidad de esta comunidad. Sus paisajes, tradiciones y calidez humana hacen de este pueblo una parada imprescindible para quienes desean vivir una experiencia completa en la Ribera de Cajititlán.</p>`,
+        lugares: [
+          { nombre: "Centro Comunitario", descripcion: "Un espacio que refleja la vida social y cultural de la comunidad, ideal para conocer más sobre las costumbres locales." },
+          { nombre: "Áreas Verdes", descripcion: "Zonas donde los visitantes pueden disfrutar de momentos de descanso y contacto con la naturaleza." },
+          { nombre: "Paisajes de la Ribera", descripcion: "Los alrededores ofrecen vistas atractivas de la región y escenarios ideales para la fotografía y la contemplación." },
+          { nombre: "Espacios de Convivencia", descripcion: "Lugares donde se desarrollan actividades recreativas y eventos comunitarios que fortalecen la identidad local." },
+          { nombre: "Recorridos Locales", descripcion: "Caminar por la comunidad permite descubrir rincones llenos de historia, tradición y hospitalidad." }
+        ]
+      }
+    ];
+
+    // Función para intentar cargar una imagen con diferentes extensiones
+    function tryImageLoad(imgElement, basePath, baseName, extensions, index = 0) {
+      if (index >= extensions.length) {
+        const placeholder = document.createElement('div');
+        placeholder.className = 'image-placeholder';
+        placeholder.innerHTML = `📷 ${baseName}<br>Imagen no disponible`;
+        imgElement.parentElement.appendChild(placeholder);
+        imgElement.style.display = 'none';
+        return;
+      }
+
+      const ext = extensions[index];
+      const fullPath = `${basePath}${baseName}.${ext}`;
+      
+      const tester = new Image();
+      tester.onload = () => {
+        imgElement.src = fullPath;
+        imgElement.style.display = 'block';
+      };
+      tester.onerror = () => {
+        tryImageLoad(imgElement, basePath, baseName, extensions, index + 1);
+      };
+      tester.src = fullPath;
+    }
+
+    // Función para crear la sección "¿Qué visitar?"
+    function crearSeccionVisitar(lugares) {
+      const div = document.createElement('div');
+      div.className = 'que-visitar';
+      
+      const titulo = document.createElement('h4');
+      titulo.textContent = '¿Qué visitar?';
+      div.appendChild(titulo);
+      
+      const grid = document.createElement('div');
+      grid.className = 'visitar-grid';
+      
+      lugares.forEach(lugar => {
+        const item = document.createElement('div');
+        item.className = 'visitar-item';
+        item.innerHTML = `
+          <strong>${lugar.nombre}</strong>
+          <p>${lugar.descripcion}</p>
+        `;
+        grid.appendChild(item);
+      });
+      
+      div.appendChild(grid);
+      return div;
+    }
+
+    // Función para crear una tarjeta completa de pueblo
+    function crearTarjeta(pueblo) {
+      const card = document.createElement('article');
+      card.className = 'pueblo-card';
+      
+      const mainDiv = document.createElement('div');
+      mainDiv.className = 'card-main';
+      
+      const imageDiv = document.createElement('div');
+      imageDiv.className = 'card-image';
+      
+      const img = document.createElement('img');
+      img.alt = pueblo.nombre;
+      img.style.display = 'none';
+      img.style.width = '100%';
+      img.style.height = '100%';
+      img.style.objectFit = 'cover';
+      
+      imageDiv.appendChild(img);
+      
+      const extensiones = ['png', 'jpg', 'jpeg', 'webp', 'PNG', 'JPG', 'JPEG', 'WEBP'];
+      const nombreBase = pueblo.imagen.replace(/\.[^/.]+$/, '');
+      tryImageLoad(img, 'imagenes/', nombreBase, extensiones);
+      
+      const contentDiv = document.createElement('div');
+      contentDiv.className = 'card-content';
+      
+      const titulo = document.createElement('h3');
+      titulo.textContent = pueblo.nombre;
+      
+      const descripcionDiv = document.createElement('div');
+      descripcionDiv.innerHTML = pueblo.descripcion;
+      
+      contentDiv.appendChild(titulo);
+      contentDiv.appendChild(descripcionDiv);
+      
+      mainDiv.appendChild(imageDiv);
+      mainDiv.appendChild(contentDiv);
+      
+      const visitarSection = crearSeccionVisitar(pueblo.lugares);
+      
+      card.appendChild(mainDiv);
+      card.appendChild(visitarSection);
+      
+      return card;
+    }
+
+    const container = document.getElementById('pueblosContainer');
+    pueblos.forEach(pueblo => {
+      container.appendChild(crearTarjeta(pueblo));
+    });
+  </script>
+</body>
+</html>

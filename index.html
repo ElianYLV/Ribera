@@ -1,0 +1,722 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Ribera de Cajititlán</title>
+  <style>
+    :root {
+      --naranja: #FC581A;
+      --menta: #40E0D0;
+      --fondo: #CDE8E5;
+      --verde: #063D14;
+      --texto: #111;
+      --blanco: #fff;
+      --sombra: 0 18px 50px rgba(0, 0, 0, 0.16);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background: var(--fondo);
+      color: var(--texto);
+      font-family: Arial, Helvetica, sans-serif;
+    }
+
+    .site-header {
+      position: fixed;
+      inset: 0 0 auto;
+      z-index: 30;
+      background: linear-gradient(to bottom, var(--naranja) 0 76px, var(--menta) 76px 126px);
+      border-bottom: 1px solid rgba(0, 0, 0, 0.22);
+      box-shadow: 0 8px 28px rgba(0, 0, 0, 0.08);
+    }
+
+    /*
+      Contenedor principal del encabezado.
+      Usamos una cuadrícula para posicionar logo, título, navegación y logo regional.
+    */
+    .header-inner {
+      width: 100%;
+      height: 126px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 148px 1fr auto;
+      grid-template-rows: 76px 50px;
+      align-items: center;
+      gap: 0;
+    }
+
+    .header-center {
+      grid-column: 2;
+      grid-row: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* Contenedor del bloque de navegación dentro de la franja azul.
+       Aquí decides si el botón se alinea a la izquierda, centro o derecha.
+       - `justify-content: flex-start;` mueve el botón hacia la izquierda.
+       - `justify-content: center;` lo coloca en el centro.
+       - `justify-content: flex-end;` lo mueve hacia la derecha. */
+    .header-right {
+      grid-column: 1 / -1;
+      grid-row: 2;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 0;
+      max-width: 100%;
+      gap: 12px;
+      padding: 0 16px 10px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      align-self: stretch;
+      grid-column: 1;
+      grid-row: 1;
+      min-width: 0;
+      padding: 4px 7px 5px;
+      background: #fff;
+      z-index: 2;
+    }
+
+    .regions-logo {
+      width: 120px;
+      max-width: 100%;
+      height: auto;
+      display: block;
+    }
+
+    .tlajo-logo {
+      width: 136px;
+      max-width: 100%;
+    }
+
+    .logo-image {
+      display: block;
+      width: 136px;
+      height: auto;
+    }
+
+    .brand .tlajo-logo {
+      display: none;
+    }
+
+    .brand.logo-fallback .logo-image {
+      display: none;
+    }
+
+    .brand.logo-fallback .tlajo-logo {
+      display: block;
+    }
+
+    .tlajo-word {
+      display: flex;
+      align-items: flex-end;
+      height: 40px;
+      gap: 3px;
+    }
+
+    .tlajo-letter {
+      display: block;
+      background: var(--naranja);
+    }
+
+    .tlajo-t {
+      width: 28px;
+      height: 31px;
+      border-radius: 8px 8px 0 0;
+      clip-path: polygon(0 0, 100% 0, 100% 26%, 68% 26%, 68% 100%, 30% 100%, 30% 26%, 0 26%);
+    }
+
+    .tlajo-l {
+      width: 25px;
+      height: 31px;
+      border-radius: 0 0 34px 34px;
+      clip-path: polygon(0 0, 42% 0, 42% 62%, 100% 62%, 100% 100%, 0 100%);
+    }
+
+    .tlajo-a {
+      width: 31px;
+      height: 31px;
+      border-radius: 9px 9px 0 0;
+      clip-path: polygon(35% 0, 68% 0, 100% 100%, 66% 100%, 56% 70%, 26% 70%, 16% 100%, 0 100%);
+    }
+
+    .tlajo-j {
+      width: 24px;
+      height: 31px;
+      border-radius: 0 0 32px 32px;
+      clip-path: polygon(50% 0, 100% 0, 100% 70%, 87% 100%, 18% 100%, 0 72%, 36% 72%, 42% 84%, 50% 70%);
+    }
+
+    .tlajo-green {
+      width: 18px;
+      height: 12px;
+      align-self: flex-start;
+      margin-top: 1px;
+      border-radius: 14px 14px 2px 2px;
+      background: var(--verde);
+    }
+
+    .tlajo-o {
+      width: 27px;
+      height: 31px;
+      border-radius: 50px;
+    }
+
+    .logo-text {
+      margin-top: 2px;
+      color: var(--verde);
+      font-size: 7px;
+      font-weight: 900;
+      letter-spacing: 0.15px;
+      white-space: nowrap;
+      text-align: center;
+    }
+
+    .logo-text span {
+      font-weight: 500;
+    }
+
+    .page-title {
+      margin: 0;
+      color: #050505;
+      font-size: clamp(34px, 3.2vw, 47px);
+      font-style: italic;
+      font-weight: 900;
+      text-align: center;
+      letter-spacing: 0;
+    }
+
+    .page-title-link {
+      display: inline;
+      text-decoration: none;
+      color: inherit;
+      padding: 0;
+      border: none;
+      background: transparent;
+      transition: color 160ms ease, text-decoration 160ms ease;
+    }
+
+    .page-title-link:hover,
+    .page-title-link:focus-visible {
+      text-decoration: underline;
+      outline: none;
+    }
+
+    /*
+      Navegación principal del sitio.
+      Este contenedor controla la posición interna del botón dentro de la franja azul.
+      Cambia `justify-content` para mover el botón dentro del área:
+      - `flex-start` = izquierda
+      - `center` = centro
+      - `flex-end` = derecha
+      Si quieres mover un poco más a la derecha, puedes usar `transform: translateX(16px);`.
+    */
+    .main-nav {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 450px;
+      padding: 0;
+      width: 100%;
+      max-width: 280px;
+      transform: translateX(450px);
+    }
+
+    .nav-link {
+      display: inline-flex;
+      align-items: center;
+      padding: 10px 18px;
+      background: rgba(255, 255, 255, 0.92);
+      border: 1px solid rgba(0, 0, 0, 0.12);
+      border-radius: 8px;
+      color: #111;
+      font: italic 18px/1 Arial, Helvetica, sans-serif;
+      text-decoration: none;
+      transition: background 160ms ease, color 160ms ease, transform 160ms ease;
+    }
+
+    .nav-link:hover,
+    .nav-link:focus-visible {
+      background: var(--menta);
+      color: #000;
+      transform: translateY(-1px);
+      outline: none;
+    }
+
+    .nav-item {
+      position: relative;
+    }
+
+    .nav-button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      width: min(220px, 100%);
+      max-width: 220px;
+      padding: 12px 18px;
+      border: 1px solid rgba(0, 0, 0, 0.12);
+      border-radius: 8px;
+      background: rgba(255, 255, 255, 0.95);
+      color: #111;
+      font: italic 18px/1 Arial, Helvetica, sans-serif;
+      line-height: 1;
+      cursor: pointer;
+      transition: background 160ms ease, transform 160ms ease, box-shadow 160ms ease;
+      white-space: nowrap;
+    }
+
+    .nav-button:hover,
+    .nav-button:focus-visible {
+      background: var(--menta);
+      color: #000;
+      box-shadow: none;
+      transform: translateY(-1px);
+      outline: none;
+    }
+
+    .nav-button.open {
+      /* Indicador visual cuando el botón tiene el dropdown abierto */
+      background: var(--naranja);
+      color: var(--blanco);
+      box-shadow: inset 0 -4px 0 rgba(0, 0, 0, 0.15);
+    }
+
+    .dropdown {
+      position: absolute;
+      top: 100%;
+      left: 0;
+      right: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      padding: 10px 12px;
+      border: 1px solid rgba(0, 0, 0, 0.12);
+      background: rgba(255, 255, 255, 0.98);
+      box-shadow: 0 18px 36px rgba(0, 0, 0, 0.12);
+      opacity: 0;
+      pointer-events: none;
+      transform: translateY(10px);
+      transition: opacity 170ms ease, transform 170ms ease;
+      border-radius: 10px;
+      min-width: 220px;
+      width: max-content;
+      max-width: calc(100vw - 32px);
+    }
+
+    .nav-item:hover .dropdown,
+    .nav-item:focus-within .dropdown,
+    .dropdown.open {
+      opacity: 1;
+      pointer-events: auto;
+      transform: translateY(0);
+    }
+
+    .dropdown-link {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 10px 16px;
+      border: 1px solid transparent;
+      border-radius: 8px;
+      background: transparent;
+      color: #111;
+      font: italic 16px/1 Arial, Helvetica, sans-serif;
+      text-decoration: none;
+      transition: background 160ms ease, color 160ms ease, border-color 160ms ease, transform 160ms ease;
+    }
+
+    .dropdown-link:hover,
+    .dropdown-link:focus-visible {
+      background: var(--menta);
+      color: #000;
+      border-color: rgba(0, 0, 0, 0.08);
+      transform: translateY(-1px);
+      outline: none;
+    }
+
+    .menu-title {
+      font-size: 14px;
+      font-weight: 700;
+      letter-spacing: 0.2px;
+      color: var(--verde);
+      text-transform: uppercase;
+      margin: 0 0 4px;
+    }
+
+    .hero {
+      position: fixed;
+      inset: 126px 0 0;
+      z-index: 1;
+      background: transparent;
+    }
+
+    .hero-image {
+      width: 100vw;
+      height: calc(100vh - 126px);
+      margin: 0;
+      background-color: transparent;
+      background-image: url("imagenes/fondo.jpg");
+      background-position: center;
+      background-size: cover;
+      background-repeat: no-repeat;
+      box-shadow: none;
+    }
+
+    .content {
+      position: relative;
+      z-index: 8;
+      width: min(1040px, calc(100% - 32px));
+      margin: 0 auto;
+      padding: 24px 16px 40px;
+    }
+
+    .text-panel {
+      padding: 18px 20px;
+      background: rgba(255, 255, 255, 0.95);
+      border-left: 6px solid var(--naranja);
+      box-shadow: 0 10px 24px rgba(0, 0, 0, 0.1);
+      opacity: 0;
+      transform: translateY(40px);
+      transition: opacity 780ms ease, transform 780ms ease;
+      font-size: 18px;
+      font-weight: 400;
+      line-height: 1.7;
+    }
+
+    .welcome-text {
+      margin: 0 auto 24px;
+      max-width: 760px;
+      color: #111;
+      font-size: 18px;
+      line-height: 1.8;
+      text-align: center;
+    }
+
+    .interactive-map-section {
+      width: min(1180px, 100%);
+      margin: 34px auto 0;
+    }
+
+    .interactive-map-title {
+      margin: 0 0 14px;
+      color: var(--verde);
+      font-size: clamp(28px, 3vw, 40px);
+      font-style: italic;
+      font-weight: 900;
+      line-height: 1.1;
+      text-align: center;
+    }
+
+    .interactive-map-frame {
+      width: 100%;
+      height: min(72vh, 680px);
+      min-height: 480px;
+      overflow: hidden;
+      border: 5px solid rgba(255, 255, 255, 0.88);
+      border-radius: 8px;
+      background: rgba(255, 255, 255, 0.92);
+      box-shadow: 0 24px 60px rgba(0, 0, 0, 0.22);
+    }
+
+    .interactive-map-frame iframe {
+      display: block;
+      width: 100%;
+      height: 100%;
+      border: 0;
+      background: #f3f6fa;
+    }
+
+    /*
+      Footer ligero con contacto, redes y breve historia.
+      Ayuda a completar la estructura solicitada de la página principal.
+    */
+    .site-footer {
+      width: 100%;
+      background: #f8f9f8;
+      color: #111;
+      padding: 28px 16px 24px;
+      border-top: 1px solid rgba(0, 0, 0, 0.08);
+    }
+
+    .footer-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(180px, 1fr));
+      gap: 24px;
+      max-width: 1040px;
+      margin: 0 auto;
+    }
+
+    .footer-block {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      font-size: 14px;
+      line-height: 1.6;
+    }
+
+    .footer-block h3 {
+      margin: 0;
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--verde);
+    }
+
+    .footer-block a {
+      color: #111;
+      text-decoration: none;
+      transition: color 140ms ease;
+    }
+
+    .footer-block a:hover,
+    .footer-block a:focus-visible {
+      color: var(--menta);
+      outline: none;
+    }
+
+    .text-panel.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .text-panel p {
+      margin: 0 0 22px;
+    }
+
+    .text-panel p:last-child {
+      margin-bottom: 0;
+    }
+
+    @media (max-width: 980px) {
+      .site-header {
+        position: relative;
+      }
+
+      .header-inner {
+        height: auto;
+        padding: 0 0 14px;
+        grid-template-columns: 1fr;
+        align-items: center;
+        gap: 14px;
+      }
+
+      .brand {
+        justify-content: center;
+        width: 100%;
+        min-width: 0;
+        padding: 10px;
+      }
+
+      .tlajo-logo {
+        max-width: 260px;
+        width: 74vw;
+      }
+
+      .page-title {
+        font-size: 33px;
+      }
+
+      .main-nav {
+        width: min(330px, calc(100% - 32px));
+        padding-right: 0;
+        justify-content: flex-start;
+      }
+
+      .nav-button {
+        width: 100%;
+        min-height: 48px;
+        font-size: 18px;
+      }
+
+      .dropdown {
+        right: auto;
+        left: 0;
+        width: 100%;
+      }
+
+      .hero {
+        position: fixed;
+        inset: 192px 0 0;
+      }
+
+      .hero-image {
+        width: 100%;
+        height: calc(100vh - 192px);
+        min-height: 430px;
+        margin-top: 0;
+        box-shadow: none;
+      }
+
+      .content {
+        width: calc(100% - 24px);
+        padding-top: 46vh;
+      }
+
+      .interactive-map-frame {
+        height: 440px;
+        min-height: 360px;
+      }
+    }
+
+    @media (max-width: 560px) {
+      .text-panel {
+        padding: 18px;
+        font-size: 18px;
+      }
+
+      .interactive-map-section {
+        margin-top: 26px;
+      }
+
+      .interactive-map-title {
+        font-size: 26px;
+      }
+
+      .interactive-map-frame {
+        height: 360px;
+        min-height: 320px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header class="site-header">
+    <div class="header-inner">
+      <!-- Marca principal con logo institucional a la izquierda. -->
+      <a class="brand" href="#" aria-label="Gobierno Municipal de Tlajomulco">
+        <img class="logo-image" id="logoImage" src="imagenes/logo-tlajomulco.png" alt="Tlajomulco Gobierno Municipal" />
+      </a>
+
+      <!-- Título centrado dentro de la franja superior.
+           También funciona como botón para volver a la página de inicio. -->
+      <div class="header-center">
+        <a class="page-title-link" href="index.html" aria-label="Volver al inicio">
+          <h1 class="page-title">Ribera de Cajititlán</h1>
+        </a>
+      </div>
+
+      <!-- Menú ubicado a la derecha, siguiendo el nuevo diseño pedido. -->
+      <div class="header-right">
+        <nav class="main-nav" aria-label="Secciones principales">
+          <div class="nav-item">
+            <!-- Botón "Acerca de" que abre el menú desplegable de secciones. -->
+            <button class="nav-button" type="button" aria-expanded="false">Acerca de...</button>
+            <div class="dropdown">
+              <a class="dropdown-link" href="pueblos.html">Historia de las localidades</a>
+              <a class="dropdown-link" href="redes.html">Nuestras Redes</a>
+              <a class="dropdown-link" href="contacto.html">Contáctanos</a>
+            </div>
+          </div>
+        </nav>
+      </div>
+    </div>
+  </header>
+
+  <section class="hero" aria-hidden="true">
+    <div class="hero-image" id="heroImage"></div>
+  </section>
+
+  <main class="content">
+    <!-- Texto de bienvenida ubicado debajo del héroe. -->
+    <p class="welcome-text">Bienvenido a la Ribera de Cajititlán, una región con historia, cultura y naturaleza que se vive en cada rincón de la laguna.</p>
+
+    <!-- Panel de contenido principal con información resumida. -->
+    <section class="text-panel" id="mainText" aria-label="Descripción de la Ribera de Cajititlán">
+      <p>La Ribera de Cajititlán es una región emblemática de Tlajomulco de Zúñiga, ubicada alrededor de la laguna homónima. Su riqueza cultural y ambiental la convierte en un destino único para quienes desean conocer la historia y las tradiciones locales.</p>
+      <p>Explora la historia, descubre datos relevantes y revisa los eventos que marcan la vida de las comunidades de la ribera.</p>
+    </section>
+    <section class="interactive-map-section" aria-labelledby="interactive-map-title">
+      <h2 class="interactive-map-title" id="interactive-map-title">Mapa interactivo</h2>
+      <div class="interactive-map-frame">
+        <iframe src="mapainteragtivoprueba.html" title="Mapa interactivo de la Ribera de Cajititlan"></iframe>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    const heroImage = document.querySelector("#heroImage");
+    const logoImage = document.querySelector("#logoImage");
+    const navItems = document.querySelectorAll(".nav-item");
+
+    const imageCandidates = [
+      "imagenes/fondo.jpg",
+      "imagenes/fondo.jpeg",
+      "imagenes/fondo.png",
+      "imagenes/fondo.webp",
+      "imagenes/Imagen(1).jpg",
+      "imagenes/Imagen(1).jpeg",
+      "imagenes/Imagen(1).png",
+      "imagenes/Imagen(1).webp"
+    ];
+
+    function setHeroBackground(source) {
+      heroImage.style.backgroundImage = `url("${source}")`;
+    }
+
+    function tryLocalImage(index = 0) {
+      if (index >= imageCandidates.length) return;
+      const tester = new Image();
+      tester.onload = () => setHeroBackground(imageCandidates[index]);
+      tester.onerror = () => tryLocalImage(index + 1);
+      tester.src = imageCandidates[index];
+    }
+
+    tryLocalImage();
+
+    logoImage.addEventListener("load", () => {
+      document.querySelector(".brand").classList.remove("logo-fallback");
+    });
+
+    logoImage.addEventListener("error", () => {
+      document.querySelector(".brand").classList.add("logo-fallback");
+    });
+
+    navItems.forEach((item) => {
+      const button = item.querySelector(".nav-button");
+      const dropdown = item.querySelector(".dropdown");
+
+      button.addEventListener("click", () => {
+        const isOpen = dropdown.classList.contains("open");
+
+        navItems.forEach((otherItem) => {
+          otherItem.querySelector(".nav-button").classList.remove("open");
+          otherItem.querySelector(".nav-button").setAttribute("aria-expanded", "false");
+          otherItem.querySelector(".dropdown").classList.remove("open");
+        });
+
+        if (!isOpen) {
+          button.classList.add("open");
+          button.setAttribute("aria-expanded", "true");
+          dropdown.classList.add("open");
+        }
+      });
+    });
+
+    document.addEventListener("click", (event) => {
+      if (event.target.closest(".nav-item")) return;
+
+      navItems.forEach((item) => {
+        item.querySelector(".nav-button").classList.remove("open");
+        item.querySelector(".nav-button").setAttribute("aria-expanded", "false");
+        item.querySelector(".dropdown").classList.remove("open");
+      });
+    });
+  </script>
+</body>
+</html>

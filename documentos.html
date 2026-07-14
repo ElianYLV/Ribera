@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Enviar documentos</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+      background: #eef2f7;
+      color: #1f2937;
+    }
+    .container {
+      max-width: 760px;
+      margin: 40px auto;
+      padding: 24px;
+    }
+    .card {
+      background: #ffffff;
+      border-radius: 24px;
+      padding: 28px;
+      box-shadow: 0 18px 45px rgba(15, 23, 42, 0.08);
+    }
+    h1 {
+      margin: 0 0 10px;
+      font-size: 1.9rem;
+    }
+    p.lead {
+      margin: 0 0 24px;
+      color: #475569;
+      line-height: 1.7;
+    }
+    form label {
+      display: block;
+      margin-bottom: 16px;
+      font-size: 0.95rem;
+    }
+    form input,
+    form textarea {
+      width: 100%;
+      border: 1px solid #cbd5e1;
+      border-radius: 12px;
+      padding: 12px 14px;
+      font-size: 1rem;
+      background: #f8fafc;
+      color: #0f172a;
+      box-sizing: border-box;
+    }
+    form input[type="file"] {
+      padding: 8px 14px;
+      background: white;
+    }
+    form textarea {
+      min-height: 120px;
+      resize: vertical;
+    }
+    .button-row {
+      display: flex;
+      justify-content: flex-start;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-top: 20px;
+    }
+    .btn {
+      border: none;
+      border-radius: 12px;
+      padding: 12px 20px;
+      font-size: 0.95rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+    .btn-primary {
+      background: #2563eb;
+      color: white;
+      box-shadow: 0 10px 25px rgba(37, 99, 235, 0.2);
+    }
+    .btn-primary:hover {
+      transform: translateY(-1px);
+    }
+    .notice {
+      margin-top: 22px;
+      color: #475569;
+      background: #f8fafc;
+      border: 1px solid #cbd5e1;
+      border-radius: 14px;
+      padding: 14px 16px;
+      line-height: 1.6;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="card">
+      <h1>Enviar archivos por correo</h1>
+      <p class="lead">Selecciona los archivos y envíalos directamente a un correo. El formulario abrirá tu cliente de correo con el mensaje preparado.</p>
+
+      <form id="documentForm" action="mailto:elianarturociro@gmail.com" method="post" enctype="multipart/form-data">
+        <label>
+          Tu nombre
+          <input type="text" name="nombre" placeholder="Nombre completo" required>
+        </label>
+
+        <label>
+          Tu correo
+          <input type="email" name="email" placeholder="correo@ejemplo.com" required>
+        </label>
+
+        <label>
+          Asunto
+          <input type="text" name="asunto" placeholder="Asunto del correo" value="Envío de documentos" required>
+        </label>
+
+        <label>
+          Mensaje
+          <textarea name="mensaje" placeholder="Escribe un comentario breve..." required></textarea>
+        </label>
+
+        <label>
+          Seleccionar archivos
+          <input type="file" name="archivos" multiple required>
+        </label>
+
+        <div class="button-row">
+          <button type="submit" class="btn btn-primary">Enviar por correo</button>
+        </div>
+      </form>
+
+      <div class="notice">
+        Nota: este formulario intenta abrir tu cliente de correo con los datos completos. Las imágenes y documentos seleccionados pueden o no adjuntarse automáticamente según tu navegador y cliente de correo. Para enviar archivos automáticamente sin usar un cliente local, se necesita un servicio de backend o una integración con un proveedor de correo.
+      </div>
+    </div>
+  </div>
+</body>
+</html>

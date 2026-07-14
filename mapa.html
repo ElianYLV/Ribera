@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>bienvenido a Cuexcomatitlán</title>
+
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+    <style>
+      html, body {
+        height: 100%;
+        margin: 0;
+        padding: 0;
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        background: #f3f6fa;
+      }
+      #map {
+        height: 100%;
+        width: 100%;
+        border-radius: 10px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+      }
+      .map-frame {
+        position: relative;
+        height: 100%;
+        padding: 20px;
+        box-sizing: border-box;
+       }
+      .map-card {
+        position: absolute;
+        left: 14px;
+        top: 14px;
+        z-index: 1000;
+        background: rgba(255, 255, 255, 0.92);
+        border-radius: 14px;
+        padding: 12px 14px;
+        box-shadow: 0 10px 24px rgba(0, 0, 0, 0.10);
+        max-width: 280px;
+        backdrop-filter: blur(8px);
+      } 
+      .map-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 25px 60px rgba(0, 0, 0, 0.15);
+      }
+      .map-card h1 {
+        margin: 0 0 6px;
+        font-size: 1rem;
+        color: #2d3748;
+        font-weight: 700;
+      }
+      .map-card p {
+        margin: 0 0 10px;
+        color: #4a5568;
+        line-height: 1.4;
+        font-size: 0.92rem;
+      }
+      .style-button {
+        background: linear-gradient(135deg, #2563eb, #3b82f6);
+        color: white;
+        border: none;
+        border-radius: 8px;
+        padding: 8px 10px;
+        font-size: 0.82rem;
+        cursor: pointer;
+        font-weight: 500;
+        text-decoration: none;
+        box-shadow: 0 4px 10px rgba(37, 99, 235, 0.25);
+      }
+      .button-group {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        margin-top: 12px;
+      }
+      .map-legend {
+        position: absolute;
+        right: 14px;
+        top: 14px;
+        z-index: 1000;
+        width: 180px;
+        background: rgba(255, 255, 255, 0.92);
+        border-radius: 14px;
+        padding: 10px 12px;
+        box-shadow: 0 10px 24px rgba(0, 0, 0, 0.10);
+        backdrop-filter: blur(8px);
+      }
+      .map-legend h2 {
+        margin: 0 0 8px;
+        color: #1f2937;
+        font-size: 0.95rem;
+        letter-spacing: 0.02em;
+      }
+      .legend-item {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        margin-bottom: 6px;
+        color: #334155;
+        font-size: 0.88rem;
+      }
+      .legend-dot {
+        width: 14px;
+        height: 14px;
+        border-radius: 50%;
+        display: inline-block;
+      }
+      .legend-dot.red { background: #ef4444; }
+      .legend-dot.green { background: #10b981; }
+      .legend-dot.blue { background: #3b82f6; }
+      .legend-dot.purple { background: #8b5cf6; }
+    </style>
+</head>
+<body>
+    <div class="map-frame">
+      <div class="map-card">
+        <h1>Selecciona un punto</h1>
+        <p>Haz clic en un marcador para ver más información.</p>
+      </div>
+      <div class="map-legend">
+        <h2>Marcadores</h2>
+        <div class="legend-item"><span class="legend-dot red"></span>Rutas de paseo</div>
+        <div class="legend-item"><span class="legend-dot green"></span>Área verde</div>
+        <div class="legend-item"><span class="legend-dot blue"></span>Instituciones de gobierno</div>
+        <div class="legend-item"><span class="legend-dot purple"></span>Hotel</div>
+      </div>
+      <div id="map"></div>
+    </div>
+
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+    <script>
+        var map = L.map('map', { zoomControl: false }).setView([20.428532, -103.362314], 13);
+
+        // Tile layer blanco (light)
+        var lightLayer = L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
+            subdomains: 'abcd',
+            maxZoom: 20
+        });
+
+        // Tile layer a color (voyager)
+        var colorLayer = L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', {
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
+            subdomains: 'abcd',
+            maxZoom: 20
+        });
+
+        // Iniciar con el layer a color
+        colorLayer.addTo(map);
+        L.control.zoom({ position: 'bottomright' }).addTo(map);
+
+        if (navigator.geolocation) {
+            navigator.geolocation.watchPosition(function(position) {
+                var userLatLng = [position.coords.latitude, position.coords.longitude];
+                if (!window.userLocationMarker) {
+                    window.userLocationMarker = L.circleMarker(userLatLng, {
+                        radius: 8,
+                        color: '#2563eb',
+                        fillColor: '#3b82f6',
+                        fillOpacity: 0.95,
+                        weight: 3
+                    }).addTo(map);
+                    window.userLocationCircle = L.circle(userLatLng, {
+                        radius: 40,
+                        color: '#60a5fa',
+                        fillColor: '#93c5fd',
+                        fillOpacity: 0.2,
+                        weight: 1
+                    }).addTo(map);
+                    window.userLocationMarker.bindPopup('Tu ubicación');
+                } else {
+                    window.userLocationMarker.setLatLng(userLatLng);
+                    window.userLocationCircle.setLatLng(userLatLng);
+                }
+            }, function() {
+                console.warn('No se pudo obtener la ubicación del usuario.');
+            }, {
+                enableHighAccuracy: true,
+                maximumAge: 10000,
+                timeout: 20000
+            });
+        }
+
+        var customIcon = L.icon({
+            iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-blue.png',
+            shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
+            iconSize: [25, 41],
+            iconAnchor: [12, 41],
+            popupAnchor: [1, -34],
+            shadowSize: [41, 41]
+        });
+
+        var redIcon = L.icon({
+            iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-red.png',
+            shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
+            iconSize: [25, 41],
+            iconAnchor: [12, 41],
+            popupAnchor: [1, -34],
+            shadowSize: [41, 41]
+        });
+
+        var greenIcon = L.icon({
+            iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-green.png',
+            shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
+            iconSize: [25, 41],
+            iconAnchor: [12, 41],
+            popupAnchor: [1, -34],
+            shadowSize: [41, 41]
+        });
+        var orangeIcon = L.icon({
+            iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-orange.png',
+            shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
+            iconSize: [25, 41],
+            iconAnchor: [12, 41],
+            popupAnchor: [1, -34],
+            shadowSize: [41, 41]
+        });
+
+        var purpleIcon = L.icon({
+            iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-violet.png',
+            shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
+            iconSize: [25, 41],
+            iconAnchor: [12, 41],
+            popupAnchor: [1, -34],
+            shadowSize: [41, 41]
+        });
+
+        var locations = [
+            {
+                name: 'Malecón de Cuexcomatitlán',
+                coords: [20.428532, -103.362314],
+                description: 'Un lugar ideal para caminar junto al lago y disfrutar de la vista.',
+                image: 'Ejem1.jpg'
+            },
+            {
+                name: 'Orilla del Lago',
+                coords: [20.430727, -103.312530],
+                description: 'Un lugar perfecto para relajarte y disfrutar de la naturaleza.',
+                image: 'Ejem3.jpg'
+            },
+            {
+                name: 'Paseo de la Laguna',
+                coords: [20.428225, -103.360761],
+                description: 'Un punto tranquilo para explorar la laguna y relajarte.',
+                image: 'Ejem2.jpg'
+            },
+            {
+                name: 'Plaza Principal de Cuexcomatitlán',
+                coords: [20.428112, -103.362545],
+                description: 'Un espacio verde para disfrutar de la flora y fauna local.',
+               // image: 'Ejem4.jpg'
+
+            },
+              {
+                  name: 'Escuela Primaria Urbana Manuel López Cotilla Número 711',
+                  coords: [20.427554, -103.363121],
+                  description: 'Un parque con senderos para caminar y áreas de picnic.'
+                  // image: 'Ejem5.jpg'
+              },
+              {
+                name: 'Hotel',
+                coords: [20.429093, -103.361016],
+                description: 'Punto de hospedaje en la Ribera de Cajititlán.',
+                image: 'Ejem1.jpg'
+              }
+        ];
+
+        var cardTitle = document.querySelector('.map-card h1');
+        var cardDesc = document.querySelector('.map-card p');
+
+        // Agregar marcadores personalizados al mapa
+        locations.forEach(function(location) {
+            var icon = customIcon;
+            if (location.name === 'Orilla del Lago' || location.name === 'Paseo de la Laguna') {
+                icon = redIcon;
+            } else if (location.name === 'Plaza Principal de Cuexcomatitlán') {
+                icon = greenIcon;
+            } else if (location.name === 'Hotel') {
+                icon = purpleIcon;
+            } //else if (location.name === 'Escuela Primaria Urbana Manuel López Cotilla Número 711') {
+            //     icon = orangeIcon;
+            // }
+
+            var marker = L.marker(location.coords, {icon: icon}).addTo(map);
+            marker.bindPopup('<strong>' + location.name + '</strong><br><img src="imagenes/' + (location.image || 'Ejem1.jpg') + '" alt="' + location.name + '" style="display:block; margin: 10px auto; width:200px; height:auto; border-radius: 8px;"><br>' + location.description);
+            marker.on('click', function() {
+                cardTitle.textContent = location.name;
+                cardDesc.textContent = location.description;
+            });
+        });
+
+        // Agregar ruta con estilo punteado
+        var routeCoords = [
+            [20.428225, -103.360761],
+            [20.426000, -103.354000],
+            [20.420464, -103.325249],
+            [20.430727, -103.312530]
+        ];
+        
+        var route = L.polyline(routeCoords, {
+            color: '#FF0000',
+            weight: 5,
+            opacity: 0.8,
+            dashArray: '10, 10'
+        }).addTo(map);
+
+    </script>
+</body>
+</html>

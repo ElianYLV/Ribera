@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Cajititlan - Ribera de Cajititlan</title>
+  <style>
+    :root {
+      --naranja: #FC581A;
+      --menta: #40E0D0;
+      --fondo: #CDE8E5;
+      --verde: #063D14;
+      --texto: #111;
+      --panel: rgba(255, 255, 255, 0.94);
+      --sombra: 0 22px 56px rgba(0, 0, 0, 0.18);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      color: var(--texto);
+      font-family: Arial, Helvetica, sans-serif;
+      background:
+        linear-gradient(135deg, rgba(205, 232, 229, 0.96), rgba(175, 207, 202, 0.92)),
+        var(--fondo);
+    }
+
+    .site-header {
+      background: linear-gradient(to bottom, var(--naranja) 0 76px, var(--menta) 76px 126px);
+      border-bottom: 1px solid rgba(0, 0, 0, 0.22);
+      box-shadow: 0 8px 28px rgba(0, 0, 0, 0.08);
+    }
+
+    .header-inner {
+      width: 100%;
+      min-height: 126px;
+      display: grid;
+      grid-template-columns: 148px 1fr;
+      grid-template-rows: 76px 50px;
+      align-items: center;
+    }
+
+    .brand {
+      grid-column: 1;
+      grid-row: 1;
+      align-self: stretch;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 4px 7px 5px;
+      background: #fff;
+    }
+
+    .brand img {
+      width: 136px;
+      height: auto;
+      display: block;
+    }
+
+    .header-center {
+      grid-column: 2;
+      grid-row: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0 18px;
+    }
+
+    .page-title {
+      margin: 0;
+      color: #050505;
+      font-size: clamp(34px, 3.2vw, 47px);
+      font-style: italic;
+      font-weight: 900;
+      text-align: center;
+      letter-spacing: 0;
+    }
+
+    .home-link {
+      grid-column: 1 / -1;
+      grid-row: 2;
+      justify-self: center;
+      display: inline-flex;
+      align-items: center;
+      min-height: 40px;
+      padding: 10px 18px;
+      border: 1px solid rgba(0, 0, 0, 0.12);
+      border-radius: 8px;
+      background: rgba(255, 255, 255, 0.95);
+      color: #111;
+      font: italic 18px/1 Arial, Helvetica, sans-serif;
+      text-decoration: none;
+      transition: background 160ms ease, transform 160ms ease;
+    }
+
+    .home-link:hover,
+    .home-link:focus-visible {
+      background: var(--menta);
+      transform: translateY(-1px);
+      outline: none;
+    }
+
+    main {
+      width: min(1180px, calc(100% - 36px));
+      margin: 0 auto;
+      padding: 42px 0 68px;
+    }
+
+    .section-title {
+      margin: 0 0 18px;
+      color: var(--verde);
+      font-size: clamp(30px, 3vw, 44px);
+      font-style: italic;
+      font-weight: 900;
+      line-height: 1.08;
+      text-align: center;
+    }
+
+    .image-section,
+    .info-section,
+    .map-section {
+      margin-bottom: 38px;
+    }
+
+    .image-frame {
+      width: min(920px, 100%);
+      margin: 0 auto;
+      overflow: hidden;
+      border: 5px solid rgba(255, 255, 255, 0.9);
+      border-radius: 8px;
+      background: var(--panel);
+      box-shadow: var(--sombra);
+      aspect-ratio: 16 / 9;
+    }
+
+    .image-frame img {
+      width: 100%;
+      height: 100%;
+      display: block;
+      object-fit: cover;
+    }
+
+    .info-panel {
+      padding: clamp(24px, 3vw, 38px);
+      border-left: 8px solid var(--naranja);
+      background: var(--panel);
+      box-shadow: var(--sombra);
+      font-size: clamp(18px, 1.5vw, 22px);
+      font-weight: 600;
+      line-height: 1.45;
+    }
+
+    .info-panel p {
+      margin: 0 0 18px;
+    }
+
+    .info-panel p:last-child {
+      margin-bottom: 0;
+    }
+
+    .map-frame {
+      width: 100%;
+      height: min(70vh, 640px);
+      min-height: 440px;
+      overflow: hidden;
+      border: 5px solid rgba(255, 255, 255, 0.9);
+      border-radius: 8px;
+      background: var(--panel);
+      box-shadow: var(--sombra);
+    }
+
+    .map-frame iframe {
+      width: 100%;
+      height: 100%;
+      display: block;
+      border: 0;
+      background: #f3f6fa;
+    }
+
+    @media (max-width: 760px) {
+      .header-inner {
+        grid-template-columns: 1fr;
+        grid-template-rows: auto auto auto;
+      }
+
+      .brand,
+      .header-center,
+      .home-link {
+        grid-column: 1;
+        grid-row: auto;
+      }
+
+      .brand {
+        width: 148px;
+        height: 76px;
+      }
+
+      .header-center {
+        padding: 14px 16px;
+      }
+
+      .page-title {
+        font-size: 32px;
+      }
+
+      main {
+        width: calc(100% - 24px);
+        padding-top: 28px;
+      }
+
+      .map-frame {
+        height: 420px;
+        min-height: 360px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header class="site-header">
+    <div class="header-inner">
+      <a class="brand" href="index.html" aria-label="Volver al inicio">
+        <img src="imagenes/logo-tlajomulco.png" alt="Tlajomulco Gobierno Municipal" />
+      </a>
+
+      <div class="header-center">
+        <h1 class="page-title">Cajititlan</h1>
+      </div>
+
+      <a class="home-link" href="index.html">Volver al inicio</a>
+    </div>
+  </header>
+
+  <main>
+    <section class="image-section" aria-labelledby="imagen-title">
+      <h2 class="section-title" id="imagen-title">Imagen</h2>
+      <div class="image-frame">
+        <img src="imagenes/Caji.jpg" alt="Vista de Cajititlan" />
+      </div>
+    </section>
+
+    <section class="info-section" aria-labelledby="info-title">
+      <h2 class="section-title" id="info-title">Informacion</h2>
+      <div class="info-panel">
+        <p>Cajititlan es uno de los puntos mas representativos de la ribera, reconocido por su relacion con la laguna, sus tradiciones y sus espacios de convivencia.</p>
+        <p>Su malecon, su plaza principal y sus zonas cercanas al agua lo convierten en un lugar ideal para caminar, tomar fotografias, disfrutar la gastronomia local y conocer la identidad de la comunidad.</p>
+      </div>
+    </section>
+
+    <section class="map-section" aria-labelledby="mapa-title">
+      <h2 class="section-title" id="mapa-title">Mapa</h2>
+      <div class="map-frame">
+
+        <iframe src="mapacaji.html" title="Mapa de Cajititlan"></iframe>
+      </div>
+    </section>
+  </main>
+</body>
+</html>
