@@ -7,6 +7,85 @@
 
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
     <style>
+
+    .custom-popup .leaflet-popup-content {
+    width: 240px !important;
+    margin: 12px;
+}
+
+.custom-popup .leaflet-popup-content-wrapper {
+    border-radius: 14px;
+    box-shadow: 0 10px 24px rgba(0, 0, 0, 0.16);
+}
+
+.custom-popup .leaflet-popup-tip {
+    box-shadow: none;
+}
+
+.custom-popup.popup-red .leaflet-popup-content-wrapper,
+.custom-popup.popup-red .leaflet-popup-tip {
+    background: #fef2f2;
+}
+
+.custom-popup.popup-green .leaflet-popup-content-wrapper,
+.custom-popup.popup-green .leaflet-popup-tip {
+    background: #ecfdf5;
+}
+
+.custom-popup.popup-orange .leaflet-popup-content-wrapper,
+.custom-popup.popup-orange .leaflet-popup-tip {
+    background: #fff7ed;
+}
+
+.custom-popup.popup-yellow .leaflet-popup-content-wrapper,
+.custom-popup.popup-yellow .leaflet-popup-tip {
+    background: #fefce8;
+}
+
+.custom-popup.popup-purple .leaflet-popup-content-wrapper,
+.custom-popup.popup-purple .leaflet-popup-tip {
+    background: #f5f3ff;
+}
+
+.custom-popup.popup-red .popup-button {
+    background: linear-gradient(135deg, #dc2626, #ef4444);
+}
+
+.custom-popup.popup-green .popup-button {
+    background: linear-gradient(135deg, #059669, #10b981);
+}
+
+.custom-popup.popup-orange .popup-button {
+    background: linear-gradient(135deg, #ea580c, #f97316);
+}
+
+.custom-popup.popup-yellow .popup-button {
+    background: linear-gradient(135deg, #ca8a04, #eab308);
+}
+
+.custom-popup.popup-purple .popup-button {
+    background: linear-gradient(135deg, #7c3aed, #8b5cf6);
+}
+
+.custom-popup .popup-button {
+    display: inline-block;
+    padding: 10px 16px;
+    border-radius: 8px;
+    color: white;
+    font-weight: 600;
+    text-decoration: underline;
+    text-decoration-color: currentColor;
+}
+
+.popup-image{
+    display:block;
+    width:100%;
+    max-width:220px;
+    height:150px;
+    object-fit:cover;
+    margin:10px auto;
+    border-radius:10px;
+}
       html, body {
         height: 100%;
         margin: 0;
@@ -106,8 +185,10 @@
       }
       .legend-dot.red { background: #ef4444; }
       .legend-dot.green { background: #10b981; }
-      .legend-dot.blue { background: #3b82f6; }
+      .legend-dot.orange { background: #f97316; }
+      .legend-dot.yellow { background: #facc15; }
       .legend-dot.purple { background: #8b5cf6; }
+      
     </style>
 </head>
 <body>
@@ -117,18 +198,20 @@
         <p>Haz clic en un marcador para ver más información.</p>
       </div>
       <div class="map-legend">
-        <h2>Marcadores</h2>
-        <div class="legend-item"><span class="legend-dot red"></span>Rutas de paseo</div>
-        <div class="legend-item"><span class="legend-dot green"></span>Área verde</div>
-        <div class="legend-item"><span class="legend-dot blue"></span>Instituciones de gobierno</div>
-        <div class="legend-item"><span class="legend-dot purple"></span>Hotel</div>
+        <h2>Categorías</h2>
+        <div class="legend-item"><span class="legend-dot red"></span>  Lugares turísticos</div>
+        <div class="legend-item"><span class="legend-dot green"></span>  Áreas verdes</div>
+        <div class="legend-item"><span class="legend-dot orange"></span>  Servicios</div>
+        <div class="legend-item"><span class="legend-dot yellow"></span>  Instituciones educativas</div>
+        <div class="legend-item"><span class="legend-dot purple"></span>  Hospedaje</div>
       </div>
       <div id="map"></div>
     </div>
 
     <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
     <script>
-        var map = L.map('map', { zoomControl: false }).setView([20.428532, -103.362314], 13);
+        // Vista inicial centrada en el pueblo y la mayoría de marcadores
+        var map = L.map('map', { zoomControl: false }).setView([20.431660, -103.311270], 15);
 
         // Tile layer blanco (light)
         var lightLayer = L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
@@ -227,87 +310,365 @@
             shadowSize: [41, 41]
         });
 
+        var yellowIcon = L.icon({
+            iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-yellow.png',
+            shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
+            iconSize: [25, 41],
+            iconAnchor: [12, 41],
+            popupAnchor: [1, -34],
+            shadowSize: [41, 41]
+});
+
         // Definir los marcadores con sus coordenadas, nombres y descripciones
         var locations = [
-            {
-                name: 'Escuela Primaria 578 "Miguel Hidalgo"',
-                coords: [20.435802, -103.311492],
-                description: 'Un lugar ideal para caminar junto al lago y disfrutar de la vista.',
-                image: 'Ejem1.jpg'
-            },
-            {
-                name: 'Orilla del Lago',
-                coords: [20.430727, -103.312530],
-                description: 'Un lugar perfecto para relajarte y disfrutar de la naturaleza.',
-                image: 'Ejem3.jpg'
-            },
-            {
-                name: 'Paseo de la Laguna',
-                coords: [20.428225, -103.360761],
-                description: 'Un punto tranquilo para explorar la laguna y relajarte.',
-                image: 'Ejem2.jpg'
-            },
-             {
-                name: 'Ciruelos 12',
-                coords: [20.431149, -103.308663],
-                 description: 'Un espacio verde para disfrutar de la flora y fauna local.',
-               // image: 'Ejem4.jpg'
+{
+name: 'paseo de caballo',
+coords: [20.424728, -103.400687],
+description: 'Reforzando el posicionamiento de Tlajomulco como tierra de caballo.',
+image: '../imagenes/imgmigel/caballo.png'
+},
+{
+name: 'paseo de caballo final',
+coords: [20.427502, -103.308264],
+description: 'Reforzando el posicionamiento de Tlajomulco como tierra de caballo.',
+image: '../imagenes/imgmigel/caballo.png'
+},
 
-             },
-            {
-                name: 'Escuela Primaria Urbana Manuel López Cotilla Número 711',
-                coords: [20.436602, -103.311653],
-                description: 'Un parque con senderos para caminar y áreas de picnic.'
-                // image: 'Ejem5.jpg'
-            },
-            {
-                name: 'Pirámide escondida',
-                coords: [20.434900, -103.309754],
-                description: 'Un lugar para disfrutar de la naturaleza y la tranquilidad del lago.'
-                // image: 'Ejem6.jpg'
-            },
-            {
-                name: 'Hotel',
-                coords: [20.434665, -103.307490],
-                description: 'Punto de hospedaje en la Ribera de Cajititlán.',
-                image: 'Ejem1.jpg'
-            }
+    {
+        name: 'Gasolinera Pemex',
+        coords: [20.431995, -103.296539],
+        description: 'Estación de servicio ubicada estratégicamente para brindar apoyo a quienes visitan Cajititlán y la Ribera.',
+        image: '../imagenes/imacaji/pemex.png'
+    },
+
+    {
+        name: 'Cabaña Amezola',
+        coords: [20.434499, -103.318840],
+        description: 'Un espacio ideal para descansar, convivir y disfrutar de la tranquilidad que ofrece la Ribera de Cajititlán.',
+        image: '../imagenes/imacaji/cabaña amezola.png'
+    },
+    {
+        name: 'KPetrom',
+        coords: [20.438712, -103.313095],
+        description: 'Estación de servicio que facilita el recorrido de visitantes y habitantes por la Ribera de Cajititlán.',
+        image: '../imagenes/imacaji/kpetrom.png'
+    },
+    {
+        name: 'Universidad Politécnica de la ZMG-Cajititlán',
+        coords: [20.439953, -103.307988],
+        description: 'Institución de educación superior que impulsa la formación profesional y el desarrollo de la región.',
+        image: '../imagenes/imacaji/universidad.png'
+    },
+    {
+        name: 'Cajititlán de los Tres Reyes Magos',
+        coords: [20.431687, -103.311168],
+        description: 'Uno de los sitios más emblemáticos de la comunidad, reconocido por su historia y por la tradicional festividad de los Tres Reyes Magos.',
+        image: '../imagenes/imacaji/3 Reyes.png'
+    },
+    {
+        name: 'Plaza Principal de Cajititlán',
+        coords: [20.431810, -103.311330],
+        description: 'El corazón de Cajititlán, donde convergen la historia, las tradiciones y la convivencia de la comunidad.',
+        image: '../imagenes/imacaji/plaza.png'
+    },
+    {
+        name: 'Escuela Primaria Ramón Corona',
+        coords: [20.431704, -103.311672],
+        description: 'Institución educativa que ha contribuido a la formación de generaciones de niñas y niños de Cajititlán.',
+        image: '../imagenes/imacaji/escuela.png'
+    },
+    {
+        name: 'Fuente Templo de la Soledad',
+        coords: [20.431650, -103.311870],
+        description: 'Un atractivo que complementa el entorno del Templo de la Soledad y forma parte del patrimonio histórico de la comunidad.',
+        image: '../imagenes/imacaji/fuente.png'
+    },
+    {
+        name: 'Muelle de Cajititlán',
+        coords: [20.430763, -103.312455],
+        description: 'Uno de los mejores lugares para admirar la Laguna de Cajititlán y disfrutar de espectaculares vistas al atardecer.',
+        image: '../imagenes/imacaji/muelle.png'
+    },
+    {
+        name: 'Malecón de Cajititlán',
+        coords: [20.430538, -103.312065],
+        description: 'Un agradable paseo junto a la laguna, ideal para caminar, descansar y disfrutar del paisaje natural.',
+        image: '../imagenes/imacaji/malecon.png'
+    },
+    {
+        name: 'Recaudadora Municipal de Cajititlán',
+        coords: [20.432116, -103.311206],
+        description: 'Oficina que brinda diversos servicios administrativos a los habitantes de la comunidad.',
+        image: '../imagenes/imacaji/recaudadora.png'
+    },
+    {
+        name: 'El Laurel Lake',
+        coords: [20.428138, -103.310246],
+        description: 'Espacio para disfrutar de la gastronomía y de un ambiente agradable con vistas a la Laguna de Cajititlán.',
+        image: '../imagenes/imacaji/El Laurel.png'
+    },
+    {
+        name: 'Escuela Primaria 578 "Miguel Hidalgo"',
+        coords: [20.435802, -103.311492],
+        description: 'Centro educativo que forma parte del desarrollo académico de la comunidad de Cajititlán.',
+        image: '../imagenes/imacaji/escuela 578.png'
+    },
+    {
+        name: 'Orilla del Lago',
+        coords: [20.430727, -103.312530],
+        description: 'Un lugar perfecto para disfrutar de la tranquilidad de la laguna y contemplar uno de los paisajes más representativos de la Ribera.',
+        image: '../imagenes/imacaji/orilla.png'
+    },
+    {
+        name: 'Malecón de Cuexcomatitlán',
+        coords: [20.428225, -103.360761],
+        description: 'Un espacio ideal para caminar junto a la laguna y disfrutar de la serenidad que caracteriza a Cuexcomatitlán.',
+        image: '../imagenes/imacaji/malecon de cuexco.png'
+    },
+    /*
+    {
+        name: 'Ciruelos 12',
+        coords: [20.431149, -103.308663],
+        description: 'Un espacio verde para disfrutar de la flora y fauna local.'
+    },
+    */
+    {
+        name: 'Escuela Primaria Urbana Manuel López Cotilla Número 711',
+        coords: [20.436602, -103.311653],
+        description: 'Institución que contribuye a la formación educativa y al crecimiento de la comunidad.',
+        image: '../imagenes/imacaji/escuela 711.png'
+    },
+    {
+        name: 'Pirámide escondida',
+        coords: [20.434900, -103.309754],
+        description: 'Un sitio poco conocido que despierta la curiosidad de quienes desean descubrir los rincones más singulares de Cajititlán.',
+        image: '../imagenes/imacaji/piramide.png'
+    },
+    {
+        name: 'Campo Tigres de Cajititlán',
+        coords: [20.438071, -103.313930],
+        description: 'Espacio deportivo donde se promueve la convivencia y el talento de los equipos locales.',
+        image: '../imagenes/imacaji/campo tigres.png'
+    },
+    {
+        name: 'Muelle de San Juan Evangelista',
+        coords: [20.406765, -103.317610],
+        description: 'Un lugar privilegiado para contemplar la Laguna de Cajititlán y disfrutar de un ambiente tranquilo.',
+        image: '../imagenes/imacaji/muelle san juan.png'
+    },
+    {
+        name: 'Muelle San Juan Evangelista',
+        coords: [20.406573, -103.312090],
+        description: 'Ideal para apreciar la belleza natural de la laguna y capturar fotografías inolvidables.',
+        image: '../imagenes/imacaji/muelle san juan2.png'
+    },
+    {
+        name: 'Hacienda de Cajititlán',
+        coords: [20.431714, -103.295633],
+        description: 'Un espacio con encanto campestre, ideal para eventos, reuniones y momentos especiales en un entorno natural.',
+        image: '../imagenes/imacaji/hacienda.png'
+    },
+    {
+        name: 'Hotel Sonora',
+        coords: [20.434665, -103.307490],
+        description: 'Una excelente opción de hospedaje para quienes desean descubrir los atractivos de la Ribera de Cajititlán con comodidad.',
+        image: '../imagenes/imacaji/hotel sonora.png'
+    }
+
+
         ];
 
         var cardTitle = document.querySelector('.map-card h1');
         var cardDesc = document.querySelector('.map-card p');
+        var cardWrapper = document.querySelector('.map-card');
+        var defaultPopupImage = 'Ejem1.jpg'; // Imagen por defecto usada solo si no hay imagen asignada
+
+        /* Mantener interfaz actual: tarjeta actualiza con animación suave al seleccionar marcador */
+        function updateCard(location) {
+            cardWrapper.classList.add('fade-update');
+            cardTitle.textContent = location.name;
+            cardDesc.textContent = location.description;
+            setTimeout(function() {
+                cardWrapper.classList.remove('fade-update');
+            }, 260);
+        }
 
         // Agregar marcadores personalizados al mapa
+// Lugares turísticos
+var redLocations = [
+    'Muelle San Juan Evangelista',
+    'Muelle de San Juan Evangelista',
+    'Cajititlán de los Tres Reyes Magos',
+    'Plaza Principal de Cajititlán',
+    'Fuente Templo de la Soledad',
+    'Muelle de Cajititlán',
+    'Malecón de Cuexcomatitlán',
+    'Orilla del Lago',
+    'Malecon de Cuexcomatitlán',
+    'paseo de caballo',
+    'Malecón de Cajititlán',
+    'paseo de caballo final'
+];
+
+// Naturaleza y recreación
+var greenLocations = [
+    'Cabaña Amezola',
+    'Pirámide escondida',
+    'Campo Tigres de Cajititlán',
+    'Hacienda de Cajititlán',
+    'Ciruelos 12'
+];
+
+// Servicios
+var orangeLocations = [
+    'Gasolinera Pemex',
+    'KPetrom',
+    'Recaudadora Municipal de Cajititlán'
+];
+
+// Instituciones educativas
+var yellowLocations = [
+    'Universidad Politécnica de la ZMG-Cajititlán',
+    'Escuela Primaria Ramón Corona',
+    'Escuela Primaria 578 "Miguel Hidalgo"',
+    'Escuela Primaria Urbana Manuel López Cotilla Número 711'
+];
+
+// Hospedaje
+var purpleLocations = [
+    'Hotel Sonora',
+    'El Laurel Lake'
+];
+        function getLocationCategory(locationName) {
+            if (redLocations.includes(locationName)) {
+                return 'red';
+            } else if (greenLocations.includes(locationName)) {
+                return 'green';
+            } else if (purpleLocations.includes(locationName)) {
+                return 'purple';
+            } else if (yellowLocations.includes(locationName)) {
+                return 'yellow';
+            } else if (orangeLocations.includes(locationName)) {
+                return 'orange';
+            }
+            return 'default';
+        }
+
         locations.forEach(function(location) {
             var icon = customIcon;
-            if (location.name === 'Orilla del Lago' || location.name === 'Paseo de la Laguna') {
+            var category = getLocationCategory(location.name);
+            if (category === 'red') {
                 icon = redIcon;
-            } else if (location.name === 'Pirámide escondida' || location.name === 'Ciruelos 12') {
+            } else if (category === 'green') {
                 icon = greenIcon;
-            } else if (location.name === 'Hotel') {
+            } else if (category === 'purple') {
                 icon = purpleIcon;
-            } //else if (location.name === 'Escuela Primaria Urbana Manuel López Cotilla Número 711') {
-            //     icon = orangeIcon;
-            // }
+            } else if (category === 'yellow') {
+                icon = yellowIcon;
+            } else if (category === 'orange') {
+                icon = orangeIcon;
+            }
 
             var marker = L.marker(location.coords, {icon: icon}).addTo(map);
-            marker.bindPopup('<strong>' + location.name + '</strong><br><img src="imagenes/' + (location.image || 'Ejem1.jpg') + '" alt="' + location.name + '" style="display:block; margin: 10px auto; width:200px; height:auto; border-radius: 8px;"><br>' + location.description);
+            var popupImage = location.image ? location.image : defaultPopupImage;
+            var directionsUrl = 'https://www.google.com/maps/search/?api=1&query=' + location.coords[0] + ',' + location.coords[1];
+            var popupContent =
+                '<div class="popup-card custom-popup-content">' +
+                '<h3 class="popup-title">' + location.name + '</h3>' +
+                '<img class="popup-image" src="imagenes/' + popupImage + '" alt="' + location.name + '" onerror="this.onerror=null;this.src=\'imagenes/' + defaultPopupImage + '\'">' +
+                '<a class="popup-button" target="_blank" rel="noopener" href="' + directionsUrl + '">Cómo llegar</a>' +
+                '</div>';
+            marker.bindPopup(popupContent, { className: 'custom-popup popup-' + category, maxWidth: 320 });
             marker.on('click', function() {
-                cardTitle.textContent = location.name;
-                cardDesc.textContent = location.description;
+                updateCard(location);
             });
         });
 
         // Agregar ruta con estilo punteado
         var routeCoords = [
+            [20.406765, -103.317610],
+            [20.415339, -103.337154],
+            [20.419739, -103.346137],
+            [20.423207, -103.355170],
             [20.428225, -103.360761],
-            [20.426000, -103.354000],
-            [20.420464, -103.325249],
-            [20.430727, -103.312530]
+            [20.428034, -103.351684],
+            [20.426479, -103.340641],
+            [20.424926, -103.332106],
+            [20.425462, -103.322724],
+            [20.430727, -103.312530],
+            [20.406573, -103.312090]
         ];
         
         var route = L.polyline(routeCoords, {
             color: '#FF0000',
+            weight: 5,
+            opacity: 0.8,
+            dashArray: '10, 10'
+        }).addTo(map);
+
+        var routeCoords2 = [
+            [20.424728, -103.400687],
+            [20.423827, -103.399475],
+            [20.422138, -103.395323],
+            [20.420373, -103.390661],
+            [20.420641, -103.388650],
+            [20.410292, -103.363652],
+            [20.409914, -103.362424],
+            [20.407780, -103.353648],
+            [20.406276, -103.347216],
+            [20.405741, -103.344156],
+            [20.405387, -103.340729],
+            [20.402328, -103.328150],
+            [20.402586, -103.325016],
+            [20.403373, -103.321289],
+            [20.403548, -103.318394],
+            [20.403103, -103.316023],
+            [20.402219, -103.310836],
+            [20.402050, -103.309633],
+            [20.401806, -103.307008],
+            [20.401710, -103.305822],
+            [20.401710, -103.305613],
+            [20.401771, -103.303561],
+            [20.402064, -103.293838],
+            [20.402088, -103.292438],
+            [20.401905, -103.291830],
+            [20.400784, -103.288780],
+            [20.399743, -103.287039],
+            [20.399175, -103.286082],
+            [20.401579, -103.284917],
+            [20.407179, -103.282281],
+            [20.408651, -103.283119],
+            [20.410544, -103.283733],
+            [20.411684, -103.284200],
+            [20.413723, -103.286161],
+            [20.414619, -103.286914],
+            [20.416385, -103.288873],
+            [20.416977, -103.289367],
+            [20.419106, -103.290968],
+            [20.419357, -103.291188],
+            [20.419517, -103.291376],
+            [20.419517, -103.291376],
+            [20.420171, -103.292692],
+            [20.420337, -103.293052],
+            [20.421305, -103.294509],
+            [20.423104, -103.297233],
+            [20.423301, -103.297662],
+            [20.423544, -103.298258],
+            [20.423863, -103.298822],
+            [20.424387, -103.299476],
+            [20.425055, -103.301686],
+            [20.425140, -103.301988],
+            [20.425100, -103.302760],
+            [20.425081, -103.303495],
+            [20.425148, -103.304023],
+            [20.425377, -103.304801],
+            [20.425884, -103.306155],
+            [20.427007, -103.307754],
+            [20.427502, -103.308264]
+        ];
+
+        var route2 = L.polyline(routeCoords2, {
+            color: '#FF6000',
             weight: 5,
             opacity: 0.8,
             dashArray: '10, 10'

@@ -163,7 +163,6 @@
 <body>
   <div class="map-frame">
     <div class="map-header">
-      <h1>Mapa</h1>
       <div class="map-description" id="mapDescription">
         <strong id="descriptionTitle">Selecciona un pueblo</strong>
         <p id="descriptionText">Haz clic en una de las imágenes del mapa para ver más detalles.</p>
@@ -174,23 +173,23 @@
     <div class="map-footer">
       <button class="place-button" onclick="abrirPagina('caji_inf.html')">
         <span class="place-title">Cajititlán</span>
-        <span class="place-subtitle">"Frase"</span>
+        <span class="place-subtitle">Evento: Paseo de laguna</span>
       </button>
       <button class="place-button" onclick="abrirPagina('cuex_inf.html')">
         <span class="place-title">Cuexcomatitlán</span>
-        <span class="place-subtitle">"Frase"</span>
+        <span class="place-subtitle">Evento: Ninguno</span>
       </button>
       <button class="place-button" onclick="abrirPagina('sanmiguel_inf.html')">
         <span class="place-title">San Miguel Cuyutlán</span>
-        <span class="place-subtitle">"Frase"</span>
+        <span class="place-subtitle">Evento: "Fiesta de San Miguel 20/07"</span>
       </button>
       <button class="place-button" onclick="abrirPagina('sanjuan_inf.html')">
         <span class="place-title">San Juan Evangelista</span>
-        <span class="place-subtitle">"Frase"</span>
+        <span class="place-subtitle">Evento: "Fiesta de San Juan 20/07"</span>
       </button>
       <button class="place-button" onclick="abrirPagina('sanlucas_inf.html')">
         <span class="place-title">San Lucas Evangelista</span>
-        <span class="place-subtitle">"Frase"</span>
+        <span class="place-subtitle">Evento: "Fiesta de San Lucas 20/07"</span>
       </button>
     </div>
   </div>
@@ -236,6 +235,14 @@
         timeout: 20000
       });
     }
+
+      const aeropuertoButton = L.icon({
+      iconUrl: "imagenes/Logos pueblo/Aeropuerto Internacional de Guadalajara2.png",
+      iconSize: [82, 82],
+      iconAnchor: [41, 41],
+      popupAnchor: [0, -42],
+      className: "map-image-button"
+    });
 
     const cuexcomatitlanButton = L.icon({
       iconUrl: "imagenes/Logos pueblo/Cuexcomatitlan-Photoroom.png",
@@ -303,6 +310,12 @@
     function abrirPagina(url) {
       window.top.location.href = url;
     }
+
+        L.marker([20.525039, -103.307927], { icon: aeropuertoButton })
+      .addTo(map)
+      .on("click", function () {
+        showDescription('Aeropuerto', 'Ubicado en el corazón del lago, es uno de los pueblos más visitados.', 'aeropuerto_inf.html');
+      });
 
     L.marker([20.428056, -103.362537], { icon: cuexcomatitlanButton })
       .addTo(map)

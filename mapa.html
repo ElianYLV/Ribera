@@ -7,6 +7,85 @@
 
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
     <style>
+
+    .custom-popup .leaflet-popup-content {
+    width: 240px !important;
+    margin: 12px;
+}
+
+.custom-popup .leaflet-popup-content-wrapper {
+    border-radius: 14px;
+    box-shadow: 0 10px 24px rgba(0, 0, 0, 0.16);
+}
+
+.custom-popup .leaflet-popup-tip {
+    box-shadow: none;
+}
+
+.custom-popup.popup-red .leaflet-popup-content-wrapper,
+.custom-popup.popup-red .leaflet-popup-tip {
+    background: #fef2f2;
+}
+
+.custom-popup.popup-green .leaflet-popup-content-wrapper,
+.custom-popup.popup-green .leaflet-popup-tip {
+    background: #ecfdf5;
+}
+
+.custom-popup.popup-orange .leaflet-popup-content-wrapper,
+.custom-popup.popup-orange .leaflet-popup-tip {
+    background: #fff7ed;
+}
+
+.custom-popup.popup-yellow .leaflet-popup-content-wrapper,
+.custom-popup.popup-yellow .leaflet-popup-tip {
+    background: #fefce8;
+}
+
+.custom-popup.popup-purple .leaflet-popup-content-wrapper,
+.custom-popup.popup-purple .leaflet-popup-tip {
+    background: #f5f3ff;
+}
+
+.custom-popup.popup-red .popup-button {
+    background: linear-gradient(135deg, #dc2626, #ef4444);
+}
+
+.custom-popup.popup-green .popup-button {
+    background: linear-gradient(135deg, #059669, #10b981);
+}
+
+.custom-popup.popup-orange .popup-button {
+    background: linear-gradient(135deg, #ea580c, #f97316);
+}
+
+.custom-popup.popup-yellow .popup-button {
+    background: linear-gradient(135deg, #ca8a04, #eab308);
+}
+
+.custom-popup.popup-purple .popup-button {
+    background: linear-gradient(135deg, #7c3aed, #8b5cf6);
+}
+
+.custom-popup .popup-button {
+    display: inline-block;
+    padding: 10px 16px;
+    border-radius: 8px;
+    color: white;
+    font-weight: 600;
+    text-decoration: underline;
+    text-decoration-color: currentColor;
+}
+
+.popup-image{
+    display:block;
+    width:100%;
+    max-width:220px;
+    height:150px;
+    object-fit:cover;
+    margin:10px auto;
+    border-radius:10px;
+}
       html, body {
         height: 100%;
         margin: 0;
@@ -106,8 +185,10 @@
       }
       .legend-dot.red { background: #ef4444; }
       .legend-dot.green { background: #10b981; }
-      .legend-dot.blue { background: #3b82f6; }
+      .legend-dot.orange { background: #f97316; }
+      .legend-dot.yellow { background: #facc15; }
       .legend-dot.purple { background: #8b5cf6; }
+      
     </style>
 </head>
 <body>
@@ -117,18 +198,20 @@
         <p>Haz clic en un marcador para ver más información.</p>
       </div>
       <div class="map-legend">
-        <h2>Marcadores</h2>
-        <div class="legend-item"><span class="legend-dot red"></span>Rutas de paseo</div>
-        <div class="legend-item"><span class="legend-dot green"></span>Área verde</div>
-        <div class="legend-item"><span class="legend-dot blue"></span>Instituciones de gobierno</div>
-        <div class="legend-item"><span class="legend-dot purple"></span>Hotel</div>
+        <h2>Categorías</h2>
+        <div class="legend-item"><span class="legend-dot red"></span>  Lugares turísticos</div>
+        <div class="legend-item"><span class="legend-dot green"></span>  Áreas verdes</div>
+        <div class="legend-item"><span class="legend-dot orange"></span>  Servicios</div>
+        <div class="legend-item"><span class="legend-dot yellow"></span>  Instituciones educativas</div>
+        <div class="legend-item"><span class="legend-dot purple"></span>  Hospedaje</div>
       </div>
       <div id="map"></div>
     </div>
 
     <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
     <script>
-        var map = L.map('map', { zoomControl: false }).setView([20.428532, -103.362314], 13);
+        // Vista inicial centrada en el área donde están los puntos
+        var map = L.map('map', { zoomControl: false }).setView([20.412500, -103.323000], 13);
 
         // Tile layer blanco (light)
         var lightLayer = L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
@@ -180,6 +263,8 @@
             });
         }
 
+        // Iconos personalizados para los marcadores
+
         var customIcon = L.icon({
             iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-blue.png',
             shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
@@ -188,6 +273,7 @@
             popupAnchor: [1, -34],
             shadowSize: [41, 41]
         });
+        //
 
         var redIcon = L.icon({
             iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-red.png',
@@ -224,77 +310,205 @@
             shadowSize: [41, 41]
         });
 
-        var locations = [
-            {
-                name: 'Malecón de Cuexcomatitlán',
-                coords: [20.428532, -103.362314],
-                description: 'Un lugar ideal para caminar junto al lago y disfrutar de la vista.',
-                image: 'Ejem1.jpg'
-            },
-            {
-                name: 'Orilla del Lago',
-                coords: [20.430727, -103.312530],
-                description: 'Un lugar perfecto para relajarte y disfrutar de la naturaleza.',
-                image: 'Ejem3.jpg'
-            },
-            {
-                name: 'Paseo de la Laguna',
-                coords: [20.428225, -103.360761],
-                description: 'Un punto tranquilo para explorar la laguna y relajarte.',
-                image: 'Ejem2.jpg'
-            },
-            {
-                name: 'Plaza Principal de Cuexcomatitlán',
-                coords: [20.428112, -103.362545],
-                description: 'Un espacio verde para disfrutar de la flora y fauna local.',
-               // image: 'Ejem4.jpg'
+        var yellowIcon = L.icon({
+            iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-yellow.png',
+            shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
+            iconSize: [25, 41],
+            iconAnchor: [12, 41],
+            popupAnchor: [1, -34],
+            shadowSize: [41, 41]
+});
 
-            },
-              {
-                  name: 'Escuela Primaria Urbana Manuel López Cotilla Número 711',
-                  coords: [20.427554, -103.363121],
-                  description: 'Un parque con senderos para caminar y áreas de picnic.'
-                  // image: 'Ejem5.jpg'
-              },
-              {
-                name: 'Hotel',
-                coords: [20.429093, -103.361016],
-                description: 'Punto de hospedaje en la Ribera de Cajititlán.',
-                image: 'Ejem1.jpg'
-              }
+        // Definir los marcadores con sus coordenadas, nombres y descripciones
+        var locations = [
+
+        {
+    name: 'Casa Ejidal Cuexcomatitlán',
+    coords: [20.428532, -103.362314],
+    description: 'Espacio de reunión donde se realizan actividades relacionadas con la organización y el desarrollo de la comunidad.',
+    image: '../imagenes/imgcue/casa ejidal.png'
+},
+{
+    name: 'Malecón de Cuexcomatitlán',
+    coords: [20.428225, -103.360761],
+    description: 'Un espacio ideal para caminar junto a la laguna y disfrutar de la serenidad que caracteriza a Cuexcomatitlán.',
+    image: '../imagenes/imacaji/malecon de cuexco.png'
+},
+{
+    name: 'Templo de Cuexcomatitlán',
+    coords: [20.428656, -103.362010],
+    description: 'Templo representativo de la comunidad, reconocido por su importancia religiosa, cultural e histórica.',
+    image: '../imagenes/imgcue/templo.png'
+},
+{
+    name: 'Unidad Deportiva de Cuexcomatitlán',
+    coords: [20.434711, -103.361200],
+    description: 'Espacio destinado al deporte, la recreación y la convivencia, donde niños, jóvenes y familias disfrutan de diversas actividades.',
+    image: '../imagenes/imgcue/unidad.png'
+},
+{
+    name: 'Escuela Secundaria 73 Foránea',
+    coords: [20.433000, -103.360865],
+    description: 'Institución educativa que contribuye a la formación académica y al desarrollo de los jóvenes de Cuexcomatitlán.',
+    image: '../imagenes/imgcue/secundaria.png'
+},
+{
+    name: 'Rincón "LOS AYALA"',
+    coords: [20.429691, -103.361078],
+    description: 'Espacio de convivencia donde visitantes y habitantes pueden disfrutar de un ambiente agradable y familiar.',
+    image: '../imagenes/imgcue/finca.png'
+},
+{
+    name: 'Finca Cuexco',
+    coords: [20.430608, -103.363532],
+    description: 'Lugar con un ambiente campestre ideal para reuniones, eventos y momentos de convivencia en la comunidad.',
+    image: '../imagenes/imgcue/rincon.png'
+},
+{
+    name: 'Plaza Principal de Cuexcomatitlán',
+    coords: [20.428112, -103.362545],
+    description: 'El corazón de la comunidad, donde se reúnen las familias y se celebran las principales tradiciones y festividades del pueblo.',
+    image: '../imagenes/imgcue/plaza.png'
+},
+{
+    name: 'Orilla del Lago',
+    coords: [20.430727, -103.312530],
+    description: 'Un lugar perfecto para disfrutar de la tranquilidad de la laguna y contemplar uno de los paisajes más representativos de la Ribera.',
+    image: '../imagenes/imacaji/orilla.png'
+},
+{
+    name: 'Muelle San Juan Evangelista',
+    coords: [20.406573, -103.312090],
+    description: 'Un sitio ideal para apreciar la belleza natural de la laguna y disfrutar de un entorno tranquilo y agradable.',
+    image: '../imagenes/imacaji/muelle san juan2.png'
+},
+{
+    name: 'Muelle de San Juan Evangelista',
+    coords: [20.406765, -103.317610],
+    description: 'Un espacio privilegiado para contemplar la Laguna de Cajititlán y disfrutar de la tranquilidad que ofrece la naturaleza.',
+    image: '../imagenes/imacaji/muelle san juan.png'
+},
+{
+    name: 'Escuela Primaria Urbana Manuel López Cotilla Número 711',
+    coords: [20.427554, -103.363121],
+    description: 'Institución educativa comprometida con la formación académica y el desarrollo integral de niñas y niños de la comunidad.',
+    image: '../imagenes/imgcue/primaria.png'
+}
+
         ];
 
         var cardTitle = document.querySelector('.map-card h1');
         var cardDesc = document.querySelector('.map-card p');
+        var cardWrapper = document.querySelector('.map-card');
+        var defaultPopupImage = 'Ejem1.jpg'; // Imagen por defecto usada solo si no hay imagen asignada
+
+        /* Mantener interfaz actual: tarjeta actualiza con animación suave al seleccionar marcador */
+        function updateCard(location) {
+            cardWrapper.classList.add('fade-update');
+            cardTitle.textContent = location.name;
+            cardDesc.textContent = location.description;
+            setTimeout(function() {
+                cardWrapper.classList.remove('fade-update');
+            }, 260);
+        }
 
         // Agregar marcadores personalizados al mapa
+// Lugares turísticos
+var redLocations = [
+    'Malecon de Cuexcomatitlán',
+    'Quiosco de Cuexcomatitlán',
+    'Templo de Cuexcomatitlán',
+    'Malecón de Cuexcomatitlán',
+    'Muelle de San Juan Evangelista',
+    'Muelle San Juan Evangelista',
+    'Orilla del Lago',
+    'Plaza Principal de Cuexcomatitlán'
+];
+
+// Naturaleza y recreación
+var greenLocations = [
+    'Unidad Deportiva de Cuexcomatitlán',
+    'Rincón "LOS AYALA"',
+    
+];
+
+// Servicios
+var orangeLocations = [
+    'Casa Ejidal Cuexcomatitlán'
+];
+
+// Instituciones educativas
+var yellowLocations = [
+    'Escuela Primaria Urbana Manuel López Cotilla Número 711',
+    'Escuela Secundaria 73 Foránea'
+];
+
+// Hospedaje
+var purpleLocations = [
+    'Finca Cuexco'
+];
+
+
+        function getLocationCategory(locationName) {
+            if (redLocations.includes(locationName)) {
+                return 'red';
+            } else if (greenLocations.includes(locationName)) {
+                return 'green';
+            } else if (purpleLocations.includes(locationName)) {
+                return 'purple';
+            } else if (yellowLocations.includes(locationName)) {
+                return 'yellow';
+            } else if (orangeLocations.includes(locationName)) {
+                return 'orange';
+            }
+            return 'default';
+        }
+
         locations.forEach(function(location) {
             var icon = customIcon;
-            if (location.name === 'Orilla del Lago' || location.name === 'Paseo de la Laguna') {
+            var category = getLocationCategory(location.name);
+            if (category === 'red') {
                 icon = redIcon;
-            } else if (location.name === 'Plaza Principal de Cuexcomatitlán') {
+            } else if (category === 'green') {
                 icon = greenIcon;
-            } else if (location.name === 'Hotel') {
+            } else if (category === 'purple') {
                 icon = purpleIcon;
-            } //else if (location.name === 'Escuela Primaria Urbana Manuel López Cotilla Número 711') {
-            //     icon = orangeIcon;
-            // }
+            } else if (category === 'yellow') {
+                icon = yellowIcon;
+            } else if (category === 'orange') {
+                icon = orangeIcon;
+            }
 
             var marker = L.marker(location.coords, {icon: icon}).addTo(map);
-            marker.bindPopup('<strong>' + location.name + '</strong><br><img src="imagenes/' + (location.image || 'Ejem1.jpg') + '" alt="' + location.name + '" style="display:block; margin: 10px auto; width:200px; height:auto; border-radius: 8px;"><br>' + location.description);
+            var popupImage = location.image ? location.image : defaultPopupImage;
+            var directionsUrl = 'https://www.google.com/maps/search/?api=1&query=' + location.coords[0] + ',' + location.coords[1];
+            var popupContent =
+                '<div class="popup-card custom-popup-content">' +
+                '<h3 class="popup-title">' + location.name + '</h3>' +
+                '<img class="popup-image" src="imagenes/' + popupImage + '" alt="' + location.name + '" onerror="this.onerror=null;this.src=\'imagenes/' + defaultPopupImage + '\'">' +
+                '<a class="popup-button" target="_blank" rel="noopener" href="' + directionsUrl + '">Cómo llegar</a>' +
+                '</div>';
+            marker.bindPopup(popupContent, { className: 'custom-popup popup-' + category, maxWidth: 320 });
             marker.on('click', function() {
-                cardTitle.textContent = location.name;
-                cardDesc.textContent = location.description;
+                updateCard(location);
             });
         });
 
         // Agregar ruta con estilo punteado
         var routeCoords = [
+            [20.406765, -103.317610],
+            [20.415339, -103.337154],
+            [20.419739, -103.346137],
+            [20.423207, -103.355170],
             [20.428225, -103.360761],
-            [20.426000, -103.354000],
-            [20.420464, -103.325249],
-            [20.430727, -103.312530]
+            [20.428034, -103.351684],
+            [20.426479, -103.340641],
+            [20.424926, -103.332106],
+            [20.425462, -103.322724],
+            [20.430727, -103.312530],
+            [20.406573, -103.312090]
         ];
+        
         
         var route = L.polyline(routeCoords, {
             color: '#FF0000',
