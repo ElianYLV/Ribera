@@ -25,8 +25,9 @@
       color: var(--texto);
       font-family: Arial, Helvetica, sans-serif;
       background:
-        linear-gradient(135deg, rgba(205, 232, 229, 0.96), rgba(175, 207, 202, 0.92)),
-        var(--fondo);
+        linear-gradient(135deg, rgba(7, 78, 117, 0.78), rgba(46, 160, 230, 0.62)),
+        url("imagenes/fondo.jpg") center/cover no-repeat;
+      background-attachment: fixed;
     }
 
     .site-header {
@@ -78,6 +79,21 @@
       font-weight: 900;
       text-align: center;
       letter-spacing: 0;
+    }
+
+    .title-image {
+      display: block;
+      width: min(760px, 100%);
+      max-height: 140px;
+      height: auto;
+      object-fit: contain;
+      filter: drop-shadow(0 3px 8px rgba(0, 0, 0, 0.2));
+    }
+
+    .page-title-fallback {
+      display: none;
+      color: #fff;
+      text-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
     }
 
     .home-link {
@@ -227,7 +243,7 @@
       </a>
 
       <div class="header-center">
-        <h1 class="page-title">Cajititlan</h1>
+        <img class="title-image" src="imagenes/Logos pueblo/Cerroviejo.png" alt="Cerro Viejo" />
       </div>
 
       <a class="home-link" href="index.html">Volver al inicio</a>
@@ -236,7 +252,14 @@
 
   <main>
     <section class="image-section" aria-labelledby="imagen-title">
-      <h2 class="section-title" id="imagen-title">Imagen</h2>
+      <h2 class="section-title" id="imagen-title">Datos del pueblo</h2>
+      <div class="info-panel" style="margin-bottom: 18px; border-left-color: #2EA0E6;">
+        <p><strong>Fundación:</strong> Desarrollo moderno derivado del crecimiento de la ribera</p>
+        <p><strong>Población aproximada:</strong> 2,500 habitantes</p>
+        <p><strong>Ubicación:</strong> Zona poniente de la Ribera de Colores</p>
+        <p><strong>Principal atractivo:</strong> Entorno natural, tranquilidad y conexión con los demás pueblos ribereños</p>
+        <p><strong>Fiesta tradicional:</strong> Celebraciones comunitarias en honor a los Santos Reyes</p>
+      </div>
       <div class="image-frame">
         <img src="imagenes/SanJuan.jpg" alt="Vista de San Miguel Cuyutlan" />
       </div>
@@ -245,8 +268,8 @@
     <section class="info-section" aria-labelledby="info-title">
       <h2 class="section-title" id="info-title">Informacion</h2>
       <div class="info-panel">
-        <p>San Ju Cuyutlan es uno de los puntos mas representativos de la ribera, reconocido por su relacion con la laguna, sus tradiciones y sus espacios de convivencia.</p>
-        <p>Su malecon, su plaza principal y sus zonas cercanas al agua lo convierten en un lugar ideal para caminar, tomar fotografias, disfrutar la gastronomia local y conocer la identidad de la comunidad.</p>
+        <p>Los Santos Reyes es una comunidad que ha crecido junto con el desarrollo de la ribera y que actualmente representa una parte importante de la identidad de esta región de Tlajomulco. Aunque es una localidad más reciente en comparación con otros pueblos vecinos, conserva un fuerte sentido de comunidad y una estrecha relación con las tradiciones que caracterizan a la zona.</p>
+        <p>Como integrante de la Ribera de Colores, Los Santos Reyes ofrece un entorno natural privilegiado, espacios ideales para la convivencia y una ubicación estratégica para recorrer la laguna y conocer los demás pueblos ribereños. Su ambiente tranquilo y la calidez de su gente hacen que cada visita sea una experiencia cercana y memorable.</p>
       </div>
     </section>
 
