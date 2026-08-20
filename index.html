@@ -7,7 +7,7 @@
   <style>
     :root {
       --naranja: #FC581A;
-      --menta: #40E0D0;
+      --menta: #2EA0E6;
       --fondo: #CDE8E5;
       --verde: #063D14;
       --texto: #111;
@@ -33,11 +33,14 @@
 
     .site-header {
       position: fixed;
-      inset: 0 0 auto;
-      z-index: 30;
-      background: linear-gradient(to bottom, var(--naranja) 0 76px, var(--menta) 76px 126px);
-      border-bottom: 1px solid rgba(0, 0, 0, 0.22);
-      box-shadow: 0 8px 28px rgba(0, 0, 0, 0.08);
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 9999;
+      width: 100%;
+      background: rgba(255, 255, 255, 0.95);
+      border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+      box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
     }
 
     /*
@@ -46,13 +49,14 @@
     */
     .header-inner {
       width: 100%;
-      height: 126px;
+      height: 100px;
       margin: 0 auto;
       display: grid;
       grid-template-columns: 148px 1fr auto;
-      grid-template-rows: 76px 50px;
+      grid-template-rows: 60px 40px;
       align-items: center;
       gap: 0;
+      padding: 6px 12px;
     }
 
     .header-center {
@@ -69,15 +73,15 @@
        - `justify-content: center;` lo coloca en el centro.
        - `justify-content: flex-end;` lo mueve hacia la derecha. */
     .header-right {
-      grid-column: 1 / -1;
+      grid-column: 1;
       grid-row: 2;
       display: flex;
       align-items: center;
-      justify-content: center;
+      justify-content: flex-start;
       min-width: 0;
       max-width: 100%;
       gap: 12px;
-      padding: 0 16px 10px;
+      padding: 0 0 10px 0;
     }
 
     .brand {
@@ -89,7 +93,7 @@
       grid-row: 1;
       min-width: 0;
       padding: 4px 7px 5px;
-      background: #fff;
+      background: transparent;
       z-index: 2;
     }
 
@@ -194,12 +198,13 @@
 
     .page-title {
       margin: 0;
-      color: #050505;
+      color: var(--verde);
       font-size: clamp(34px, 3.2vw, 47px);
       font-style: italic;
       font-weight: 900;
       text-align: center;
       letter-spacing: 0;
+      text-shadow: none;
     }
 
     .page-title-link {
@@ -230,19 +235,19 @@
     .main-nav {
       display: flex;
       align-items: center;
-      justify-content: flex-end;
-      gap: 450px;
+      justify-content: flex-start;
+      gap: 12px;
       padding: 0;
-      width: 100%;
-      max-width: 280px;
-      transform: translateX(450px);
+      width: auto;
+      max-width: none;
+      transform: none;
     }
 
     .nav-link {
       display: inline-flex;
       align-items: center;
       padding: 10px 18px;
-      background: rgba(255, 255, 255, 0.92);
+      background: rgba(255, 255, 255, 0.95);
       border: 1px solid rgba(0, 0, 0, 0.12);
       border-radius: 8px;
       color: #111;
@@ -254,7 +259,7 @@
     .nav-link:hover,
     .nav-link:focus-visible {
       background: var(--menta);
-      color: #000;
+      color: #fff;
       transform: translateY(-1px);
       outline: none;
     }
@@ -362,14 +367,14 @@
 
     .hero {
       position: fixed;
-      inset: 126px 0 0;
+      inset: 100px 0 0;
       z-index: 1;
       background: transparent;
     }
 
     .hero-image {
       width: 100vw;
-      height: calc(100vh - 126px);
+      height: calc(100vh - 100px);
       margin: 0;
       background-color: transparent;
       background-image: url("imagenes/fondo.jpg");
@@ -385,6 +390,51 @@
       width: min(1040px, calc(100% - 32px));
       margin: 0 auto;
       padding: 24px 16px 40px;
+      padding-top: 36vh;
+    }
+
+    /* Sección 'Acerca de' con tarjetas para cada localidad */
+    .acerca-section {
+      margin: 28px auto 0;
+      width: min(1040px, calc(100% - 32px));
+    }
+
+    .cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 14px;
+      margin-top: 12px;
+    }
+
+    .card {
+      background: rgba(255,255,255,0.97);
+      border-radius: 10px;
+      padding: 14px;
+      box-shadow: 0 10px 28px rgba(0,0,0,0.08);
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      text-decoration: none;
+      color: inherit;
+      transition: transform 180ms ease, box-shadow 180ms ease;
+    }
+
+    .card:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 18px 44px rgba(0,0,0,0.12);
+    }
+
+    .card h3 {
+      margin: 0;
+      color: var(--verde);
+      font-size: 18px;
+    }
+
+    .card p {
+      margin: 0;
+      font-size: 14px;
+      line-height: 1.45;
+      color: #222;
     }
 
     .text-panel {
@@ -404,8 +454,9 @@
       margin: 0 auto 24px;
       max-width: 760px;
       color: #111;
-      font-size: 18px;
-      line-height: 1.8;
+      font-size: 22px;
+      font-weight: 600;
+      line-height: 1.6;
       text-align: center;
     }
 
@@ -607,22 +658,15 @@
            También funciona como botón para volver a la página de inicio. -->
       <div class="header-center">
         <a class="page-title-link" href="index.html" aria-label="Volver al inicio">
-          <h1 class="page-title">Ribera de Cajititlán</h1>
+          <h1 class="page-title">Ribera de Colores
+          </h1>
         </a>
       </div>
 
-      <!-- Menú ubicado a la derecha, siguiendo el nuevo diseño pedido. -->
+      <!-- Menú reducido a la izquierda, con Contacto como única opción visible. -->
       <div class="header-right">
         <nav class="main-nav" aria-label="Secciones principales">
-          <div class="nav-item">
-            <!-- Botón "Acerca de" que abre el menú desplegable de secciones. -->
-            <button class="nav-button" type="button" aria-expanded="false">Acerca de...</button>
-            <div class="dropdown">
-              <a class="dropdown-link" href="pueblos.html">Historia de las localidades</a>
-              <a class="dropdown-link" href="redes.html">Nuestras Redes</a>
-              <a class="dropdown-link" href="contacto.html">Contáctanos</a>
-            </div>
-          </div>
+          <a class="nav-link" href="contacto.html">Contacto</a>
         </nav>
       </div>
     </div>
@@ -634,7 +678,7 @@
 
   <main class="content">
     <!-- Texto de bienvenida ubicado debajo del héroe. -->
-    <p class="welcome-text">Bienvenido a la Ribera de Cajititlán, una región con historia, cultura y naturaleza que se vive en cada rincón de la laguna.</p>
+    <p class="welcome-text">Bienvenido a la Ribera de Colores, una región con historia, cultura y naturaleza que se vive en cada rincón de la laguna.</p>
 
     <!-- Panel de contenido principal con información resumida. -->
     <section class="text-panel" id="mainText" aria-label="Descripción de la Ribera de Cajititlán">
@@ -642,9 +686,32 @@
       <p>Explora la historia, descubre datos relevantes y revisa los eventos que marcan la vida de las comunidades de la ribera.</p>
     </section>
     <section class="interactive-map-section" aria-labelledby="interactive-map-title">
-      <h2 class="interactive-map-title" id="interactive-map-title">Mapa interactivo</h2>
       <div class="interactive-map-frame">
         <iframe src="mapainteragtivoprueba.html" title="Mapa interactivo de la Ribera de Cajititlan"></iframe>
+      </div>
+    </section>
+    <section id="acerca" class="acerca-section" aria-label="Acerca de las localidades">
+      <div class="cards">
+        <a class="card" href="caji_inf.html">
+          <h3>Cajititlán</h3>
+          <p>Tradición pesquera y miradores naturales junto a la laguna.</p>
+        </a>
+        <a class="card" href="cuex_inf.html">
+          <h3>Cuexcomatitlán</h3>
+          <p>Comunidad con historia y fiestas populares.</p>
+        </a>
+        <a class="card" href="sanmiguel_inf.html">
+          <h3>San Miguel Cuyutlán</h3>
+          <p>Espacios naturales y memoria local.</p>
+        </a>
+        <a class="card" href="sanjuan_inf.html">
+          <h3>San Juan Evangelista</h3>
+          <p>Cultura viva y actividades comunitarias.</p>
+        </a>
+        <a class="card" href="sanlucas_inf.html">
+          <h3>San Lucas Evangelista</h3>
+          <p>Artesanías y tradiciones religiosas locales.</p>
+        </a>
       </div>
     </section>
   </main>
@@ -652,7 +719,6 @@
   <script>
     const heroImage = document.querySelector("#heroImage");
     const logoImage = document.querySelector("#logoImage");
-    const navItems = document.querySelectorAll(".nav-item");
 
     const imageCandidates = [
       "imagenes/fondo.jpg",
@@ -687,36 +753,7 @@
       document.querySelector(".brand").classList.add("logo-fallback");
     });
 
-    navItems.forEach((item) => {
-      const button = item.querySelector(".nav-button");
-      const dropdown = item.querySelector(".dropdown");
-
-      button.addEventListener("click", () => {
-        const isOpen = dropdown.classList.contains("open");
-
-        navItems.forEach((otherItem) => {
-          otherItem.querySelector(".nav-button").classList.remove("open");
-          otherItem.querySelector(".nav-button").setAttribute("aria-expanded", "false");
-          otherItem.querySelector(".dropdown").classList.remove("open");
-        });
-
-        if (!isOpen) {
-          button.classList.add("open");
-          button.setAttribute("aria-expanded", "true");
-          dropdown.classList.add("open");
-        }
-      });
-    });
-
-    document.addEventListener("click", (event) => {
-      if (event.target.closest(".nav-item")) return;
-
-      navItems.forEach((item) => {
-        item.querySelector(".nav-button").classList.remove("open");
-        item.querySelector(".nav-button").setAttribute("aria-expanded", "false");
-        item.querySelector(".dropdown").classList.remove("open");
-      });
-    });
+    // El dropdown se eliminó; la navegación usa enlaces directos.
   </script>
 </body>
 </html>

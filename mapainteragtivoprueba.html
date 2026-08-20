@@ -103,7 +103,7 @@
       right: 18px;
       bottom: 18px;
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
       gap: 12px;
       z-index: 1000;
     }
@@ -111,16 +111,33 @@
     .place-button {
       display: flex;
       flex-direction: column;
-      align-items: flex-start;
-      gap: 6px;
-      padding: 14px 16px;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 14px;
       background: rgba(255, 255, 255, 0.92);
       border: 1px solid rgba(148, 163, 184, 0.18);
       border-radius: 18px;
       color: #0f172a;
-      text-align: left;
+      text-align: center;
       cursor: pointer;
       transition: transform 160ms ease, box-shadow 160ms ease, background 160ms ease;
+    }
+
+    .place-button img {
+      display: block;
+      width: 100%;
+      max-width: 180px;
+      height: auto;
+      object-fit: contain;
+    }
+
+    .place-caption {
+      display: block;
+      font-size: 0.8rem;
+      font-weight: 700;
+      color: #0f172a;
+      letter-spacing: 0.02em;
     }
 
     .place-button:hover {
@@ -173,24 +190,19 @@
     <div id="map"></div>
     <div class="map-footer">
       <button class="place-button" onclick="abrirPagina('caji_inf.html')">
-        <span class="place-title">Cajititlán</span>
-        <span class="place-subtitle">"Frase"</span>
+        <img src="imagenes/Cajititlaan..png" alt="Cajititlán" />
       </button>
       <button class="place-button" onclick="abrirPagina('cuex_inf.html')">
-        <span class="place-title">Cuexcomatitlán</span>
-        <span class="place-subtitle">"Frase"</span>
+        <img src="imagenes/Cuexcomatitla..png" alt="Cuexcomatitlán" />
       </button>
       <button class="place-button" onclick="abrirPagina('sanmiguel_inf.html')">
-        <span class="place-title">San Miguel Cuyutlán</span>
-        <span class="place-subtitle">"Frase"</span>
+        <img src="imagenes/Sanmiguel.png" alt="San Miguel Cuyutlán" />
       </button>
       <button class="place-button" onclick="abrirPagina('sanjuan_inf.html')">
-        <span class="place-title">San Juan Evangelista</span>
-        <span class="place-subtitle">"Frase"</span>
+        <img src="imagenes/Sanjuan.png" alt="San Juan Evangelista" />
       </button>
       <button class="place-button" onclick="abrirPagina('sanlucas_inf.html')">
-        <span class="place-title">San Lucas Evangelista</span>
-        <span class="place-subtitle">"Frase"</span>
+        <img src="imagenes/san lucas.png" alt="San Lucas Evangelista" />
       </button>
     </div>
   </div>
