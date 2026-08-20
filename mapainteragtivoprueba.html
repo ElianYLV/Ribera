@@ -103,7 +103,7 @@
       right: 18px;
       bottom: 18px;
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
       gap: 12px;
       z-index: 1000;
     }
@@ -111,33 +111,16 @@
     .place-button {
       display: flex;
       flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      gap: 8px;
-      padding: 14px;
+      align-items: flex-start;
+      gap: 6px;
+      padding: 14px 16px;
       background: rgba(255, 255, 255, 0.92);
       border: 1px solid rgba(148, 163, 184, 0.18);
       border-radius: 18px;
       color: #0f172a;
-      text-align: center;
+      text-align: left;
       cursor: pointer;
       transition: transform 160ms ease, box-shadow 160ms ease, background 160ms ease;
-    }
-
-    .place-button img {
-      display: block;
-      width: 100%;
-      max-width: 180px;
-      height: auto;
-      object-fit: contain;
-    }
-
-    .place-caption {
-      display: block;
-      font-size: 0.8rem;
-      font-weight: 700;
-      color: #0f172a;
-      letter-spacing: 0.02em;
     }
 
     .place-button:hover {
@@ -180,7 +163,6 @@
 <body>
   <div class="map-frame">
     <div class="map-header">
-      <h1>Mapa</h1>
       <div class="map-description" id="mapDescription">
         <strong id="descriptionTitle">Selecciona un pueblo</strong>
         <p id="descriptionText">Haz clic en una de las imágenes del mapa para ver más detalles.</p>
@@ -190,19 +172,24 @@
     <div id="map"></div>
     <div class="map-footer">
       <button class="place-button" onclick="abrirPagina('caji_inf.html')">
-        <img src="imagenes/Cajititlaan..png" alt="Cajititlán" />
+        <span class="place-title">Cajititlán</span>
+        <span class="place-subtitle">Evento: Paseo de laguna</span>
       </button>
       <button class="place-button" onclick="abrirPagina('cuex_inf.html')">
-        <img src="imagenes/Cuexcomatitla..png" alt="Cuexcomatitlán" />
+        <span class="place-title">Cuexcomatitlán</span>
+        <span class="place-subtitle">Evento: Ninguno</span>
       </button>
       <button class="place-button" onclick="abrirPagina('sanmiguel_inf.html')">
-        <img src="imagenes/Sanmiguel.png" alt="San Miguel Cuyutlán" />
+        <span class="place-title">San Miguel Cuyutlán</span>
+        <span class="place-subtitle">Evento: "Fiesta de San Miguel 20/07"</span>
       </button>
       <button class="place-button" onclick="abrirPagina('sanjuan_inf.html')">
-        <img src="imagenes/Sanjuan.png" alt="San Juan Evangelista" />
+        <span class="place-title">San Juan Evangelista</span>
+        <span class="place-subtitle">Evento: "Fiesta de San Juan 20/07"</span>
       </button>
       <button class="place-button" onclick="abrirPagina('sanlucas_inf.html')">
-        <img src="imagenes/san lucas.png" alt="San Lucas Evangelista" />
+        <span class="place-title">San Lucas Evangelista</span>
+        <span class="place-subtitle">Evento: "Fiesta de San Lucas 20/07"</span>
       </button>
     </div>
   </div>
@@ -248,6 +235,14 @@
         timeout: 20000
       });
     }
+
+      const aeropuertoButton = L.icon({
+      iconUrl: "imagenes/Logos pueblo/Aeropuerto Internacional de Guadalajara2.png",
+      iconSize: [82, 82],
+      iconAnchor: [41, 41],
+      popupAnchor: [0, -42],
+      className: "map-image-button"
+    });
 
     const cuexcomatitlanButton = L.icon({
       iconUrl: "imagenes/Logos pueblo/Cuexcomatitlan-Photoroom.png",
@@ -315,6 +310,12 @@
     function abrirPagina(url) {
       window.top.location.href = url;
     }
+
+        L.marker([20.525039, -103.307927], { icon: aeropuertoButton })
+      .addTo(map)
+      .on("click", function () {
+        showDescription('Aeropuerto', 'Ubicado en el corazón del lago, es uno de los pueblos más visitados.', 'aeropuerto_inf.html');
+      });
 
     L.marker([20.428056, -103.362537], { icon: cuexcomatitlanButton })
       .addTo(map)
