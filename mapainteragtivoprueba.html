@@ -1,12 +1,16 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
+  <!-- Metadatos de la página y título del mapa interactivo -->
+  <!-- Este archivo muestra un mapa interactivo con marcadores para cada pueblo y una lista de botones de navegación. -->
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Mapa interactivo</title>
 
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+  <!-- Estilos principales para el mapa, los botones de navegación y el panel de descripción. -->
   <style>
+    /* Se definen estilos de layout para el mapa, el panel flotante y los botones de selección de pueblo. */
     html,
     body {
       width: 100%;
@@ -161,7 +165,9 @@
   </style>
 </head>
 <body>
+  <!-- Contenedor principal que agrupa el mapa y la interfaz flotante de descripción/botones. -->
   <div class="map-frame">
+    <!-- Contenedor de la interfaz del mapa: cabecera flotante, descripción y mapa mismo. -->
     <div class="map-header">
       <div class="map-description" id="mapDescription">
         <strong id="descriptionTitle">Selecciona un pueblo</strong>
@@ -170,6 +176,7 @@
       </div>
     </div>
     <div id="map"></div>
+    <!-- Barra inferior con botones para abrir páginas informativas de cada pueblo. -->
     <div class="map-footer">
       <button class="place-button" onclick="abrirPagina('caji_inf.html')">
         <span class="place-title">Cajititlán</span>
@@ -194,9 +201,13 @@
     </div>
   </div>
 
+  <!-- Carga la librería Leaflet para renderizar el mapa interactivo. -->
   <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
   <script>
+    // Inicializa el mapa en el div con id="map" y define la vista inicial centrada en la ribera. 
     const map = L.map("map").setView([20.4178, -103.3502], 12);
+
+    // El tile layer define la apariencia base del mapa y los créditos de atribución.
 
     L.tileLayer("https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png", {
       attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
@@ -204,6 +215,7 @@
       maxZoom: 20
     }).addTo(map);
 
+    // Si el usuario permite geolocalización, mostramos su posición con un marcador y un círculo.
     if (navigator.geolocation) {
       navigator.geolocation.watchPosition(function (position) {
         const userLatLng = [position.coords.latitude, position.coords.longitude];
@@ -293,6 +305,7 @@
     });
 
 
+    // Actualiza el panel de descripción con el pueblo seleccionado.
     function showDescription(title, text, url) {
       const description = document.getElementById('mapDescription');
       const titleEl = document.getElementById('descriptionTitle');
@@ -307,10 +320,12 @@
       description.classList.add('visible');
     }
 
+    // Navega a otra página informativa cuando el usuario hace clic en un botón.
     function abrirPagina(url) {
       window.top.location.href = url;
     }
 
+    // Añade marcadores en el mapa con iconos de pueblo y eventos click para mostrar detalles.
         L.marker([20.525039, -103.307927], { icon: aeropuertoButton })
       .addTo(map)
       .on("click", function () {

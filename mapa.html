@@ -1,11 +1,14 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
+    <!-- Metadatos y título del mapa específico de Cuexcomatitlán (u otro pueblo). -->
+    <!-- Este archivo carga un mapa Leaflet con marcadores y una leyenda de categorías. -->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>bienvenido a Cuexcomatitlán</title>
 
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+    <!-- Estilos para el mapa, tarjeta informativa, leyenda y botones. -->
     <style>
 
     .custom-popup .leaflet-popup-content {
@@ -192,6 +195,7 @@
     </style>
 </head>
 <body>
+    <!-- Contenedor de la página que mantiene el mapa y las tarjetas flotantes. -->
     <div class="map-frame">
       <div class="map-card">
         <h1>Selecciona un punto</h1>
@@ -208,9 +212,10 @@
       <div id="map"></div>
     </div>
 
+    <!-- Carga la librería Leaflet para generar el mapa interactivo. -->
     <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
     <script>
-        // Vista inicial centrada en el área donde están los puntos
+        // Inicializa el mapa en el div #map y fija la vista inicial para este pueblo.
         var map = L.map('map', { zoomControl: false }).setView([20.412500, -103.323000], 13);
 
         // Tile layer blanco (light)
@@ -231,6 +236,7 @@
         colorLayer.addTo(map);
         L.control.zoom({ position: 'bottomright' }).addTo(map);
 
+        // Geolocalización: muestra la posición del usuario si el navegador lo permite.
         if (navigator.geolocation) {
             navigator.geolocation.watchPosition(function(position) {
                 var userLatLng = [position.coords.latitude, position.coords.longitude];
